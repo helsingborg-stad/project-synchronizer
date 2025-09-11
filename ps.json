@@ -1,0 +1,19 @@
+{
+	"/package.json": [
+		"license",
+		"dependencies",
+		"devDependencies",
+		"scripts",
+		"engines",
+		"jest"
+	],
+	"/composer.json": ["require", "require-dev", "scripts"],
+	"/tsconfig.json": ["compilerOptions"],
+	"/.vscode/settings.json": [
+		"editor.formatOnSave",
+		"editor.defaultFormatter",
+		"editor.codeActionsOnSave"
+	],
+	"/.vscode/extensions.json": ["recommendations"],
+	"/vite.config.mjs": []
+}
