@@ -1,0 +1,8 @@
+{
+	"repo": "https://raw.githubusercontent.com/helsingborg-stad/municipio-dependency-master/refs/heads/main",
+	"files": {
+		"/package.json": "PackageJsonComparer",
+		"/composer.json": "ComposerJsonComparer",
+		"/tsconfig.json": "DefaultJsonComparer"
+	}
+}
