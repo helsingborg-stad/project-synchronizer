@@ -1,0 +1,44 @@
+<?php
+
+use App\Services\ConfigService;
+use App\Services\ConsoleService;
+use App\Services\FileService;
+use App\Transforms\Transform;
+
+define('SOURCE_PATH', 'https://raw.githubusercontent.com/helsingborg-stad/project-synchronizer/refs/heads/main');
+define('TARGET_PATH', getcwd());
+define('CONFIG_PATH', TARGET_PATH . '/ps-config.json');
+
+require TARGET_PATH . '/vendor/autoload.php';
+
+$cmd = (object) array_merge(
+    [
+        'source' => SOURCE_PATH,
+        'config' => CONFIG_PATH,
+        'target' => TARGET_PATH,
+    ],
+    getopt('', [
+        'source:',
+        'config:',
+        'force',
+        'help',
+    ]),
+);
+
+if (isset($cmd->help)) {
+    echo <<<TEXT
+        Usage: php ps.php
+            --config <file|url>            Configuration file or URL
+            --source <folder|url>          Source repository path
+            --force                        Overwrite existing files and property values
+            --help                         Display this help message
+        TEXT;
+    exit(1);
+}
+
+App\Module::exec([
+    'console' => new ConsoleService(),
+    'file' => new FileService(),
+    'transform' => new Transform(),
+    'config' => new ConfigService($cmd),
+]);
