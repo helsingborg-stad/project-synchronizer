@@ -1,7 +1,13 @@
 {
-	"files": {
-		"/package.json": "PackageJsonTransform",
-		"/composer.json": "ComposerJsonTransform",
-		"/tsconfig.json": "DefaultJsonTransform"
+	"/package.json": {
+		"dependencies": "SemverTransform",
+		"devDependencies": "SemverTransform",
+		"scripts": "TextTransform"
+	},
+	"/composer.json": {
+		"scripts": "TextTransform"
+	},
+	"/tsconfig.json": {
+		"scripts": "TextTransform"
 	}
 }
