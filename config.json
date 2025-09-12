@@ -1,9 +1,10 @@
 {
 	"/package.json": {
+		"license": "ObjectTransform",
 		"dependencies": "SemverTransform",
 		"devDependencies": "SemverTransform",
 		"scripts": "ObjectTransform",
-		"license": "ObjectTransform"
+		"engines": "SemverTransform"
 	},
 	"/composer.json": {
 		"require": "SemverTransform",
