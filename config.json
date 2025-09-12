@@ -2,14 +2,15 @@
 	"/package.json": {
 		"dependencies": "SemverTransform",
 		"devDependencies": "SemverTransform",
-		"scripts": "TextTransform"
+		"scripts": "ObjectTransform",
+		"license": "ObjectTransform"
 	},
 	"/composer.json": {
 		"require": "SemverTransform",
 		"require-dev": "SemverTransform",
-		"scripts": "TextTransform"
+		"scripts": "ObjectTransform"
 	},
 	"/tsconfig.json": {
-		"compilerOptions": "TextTransform"
+		"compilerOptions": "ObjectTransform"
 	}
 }

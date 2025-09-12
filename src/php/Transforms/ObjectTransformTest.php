@@ -3,23 +3,23 @@ declare(strict_types=1);
 
 namespace App\Services\Tests;
 
-use App\Transforms\TextTransform;
+use App\Transforms\ObjectTransform;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-class TextTransformTest extends TestCase {
+class ObjectTransformTest extends TestCase {
     protected function setUp(): void {
     }
 
     #[TestDox('class can be instantiated')]
     public function testClassCanBeInstantiated() {
-        $transform = new TextTransform();
-        $this->assertInstanceOf(TextTransform::class, $transform);
+        $transform = new ObjectTransform();
+        $this->assertInstanceOf(ObjectTransform::class, $transform);
     }
 
     #[TestDox('Add missing pairs')]
     public function testAddMissingPairs() {
-        $transform = new TextTransform();
+        $transform = new ObjectTransform();
 
         $result = $transform->transform([
             // Reference
@@ -37,7 +37,7 @@ class TextTransformTest extends TestCase {
 
     #[TestDox('Update existing pairs')]
     public function testUpdateExistingPairs() {
-        $transform = new TextTransform();
+        $transform = new ObjectTransform();
 
         $result = $transform->transform([
             // Reference

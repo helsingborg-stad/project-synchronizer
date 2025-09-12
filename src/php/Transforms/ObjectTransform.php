@@ -5,7 +5,7 @@ namespace App\Transforms;
 
 use App\Contracts\TransformInterface;
 
-class TextTransform implements TransformInterface {
+class ObjectTransform implements TransformInterface {
     public function transform($reference, $target): array {
         foreach ($reference as $name => $value) {
             $target[$name] = $value;
