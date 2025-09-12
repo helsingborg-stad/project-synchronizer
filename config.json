@@ -14,8 +14,8 @@
 		"compilerOptions": "ObjectTransform"
 	},
 	"/.vscode/settings.json": {
-		"editor.codeActionsOnSave": "ObjectTransform",
+		"editor.formatOnSave": "ObjectTransform",
 		"editor.defaultFormatter": "ObjectTransform",
-		"editor.formatOnSave": "ObjectTransform"
+		"editor.codeActionsOnSave": "ObjectTransform"
 	}
 }
