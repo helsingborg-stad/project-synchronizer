@@ -5,9 +5,11 @@
 		"scripts": "TextTransform"
 	},
 	"/composer.json": {
+		"require": "SemverTransform",
+		"require-dev": "SemverTransform",
 		"scripts": "TextTransform"
 	},
 	"/tsconfig.json": {
-		"scripts": "TextTransform"
+		"compilerOptions": "TextTransform"
 	}
 }
