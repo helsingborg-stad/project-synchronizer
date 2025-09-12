@@ -12,5 +12,10 @@
 	},
 	"/tsconfig.json": {
 		"compilerOptions": "ObjectTransform"
+	},
+	"/.vscode/settings.json": {
+		"editor.codeActionsOnSave": "ObjectTransform",
+		"editor.defaultFormatter": "ObjectTransform",
+		"editor.formatOnSave": "ObjectTransform"
 	}
 }
