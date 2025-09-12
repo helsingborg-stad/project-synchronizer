@@ -9,10 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class ObjectTransformTest extends TestCase
 {
-    protected function setUp(): void
-    {
-    }
-
     #[TestDox('class can be instantiated')]
     public function testClassCanBeInstantiated()
     {
@@ -20,8 +16,8 @@ class ObjectTransformTest extends TestCase
         $this->assertInstanceOf(ObjectTransform::class, $transform);
     }
 
-    #[TestDox('Add missing pairs')]
-    public function testAddMissingPairs()
+    #[TestDox('Add properties')]
+    public function testAddProperties()
     {
         $transform = new ObjectTransform();
 
@@ -43,8 +39,8 @@ class ObjectTransformTest extends TestCase
         );
     }
 
-    #[TestDox('Update existing pairs')]
-    public function testUpdateExistingPairs()
+    #[TestDox('Update properties')]
+    public function testUpdateProperties()
     {
         $transform = new ObjectTransform();
 
@@ -64,8 +60,8 @@ class ObjectTransformTest extends TestCase
             ], $result
         );
     }
-    #[TestDox('Update single property')]
-    public function testUpdateSingleProperty()
+    #[TestDox('Add or update value')]
+    public function testAddOrUpdateValue()
     {
         $transform = new ObjectTransform();
 

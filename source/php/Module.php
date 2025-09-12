@@ -40,6 +40,7 @@ class Module
                 continue;
             }
 
+            // Transform each key using the specified transform class
             foreach ($transforms as $key => $value) {
                 if(!isset($remote[$key])) {
                     continue;
@@ -48,8 +49,8 @@ class Module
                 $transform = "App\\Transforms\\{$value}";
             
                 /**
- * @var TransformInterface $comparer 
-*/
+                * @var TransformInterface $comparer 
+                */
                 $comparer = new $transform();
 
                 $local[$key] = $comparer->transform(

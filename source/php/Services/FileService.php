@@ -7,9 +7,9 @@ use App\Contracts\FileServiceInterface;
 
 class FileService implements FileServiceInterface
 {
-    protected function fromJson($content): array
+    private function _fromJson($content): array
     {
-        $json = json_decode($content, true);
+        $json = json_decode($content, true);     
         if($json === null) {
             throw new \Exception("Invalid JSON content");
         }
@@ -20,30 +20,27 @@ class FileService implements FileServiceInterface
     {
         $content = @file_get_contents($repo . $path);
         if ($content === false) {
-            throw new \Exception("Could not fetch remote file: $path");
+            throw new \Exception("Could not read remote file: $path");
         }
-        return $this->fromJson($content);
+        return $this->_fromJson($content);
     }
 
     public function fetchLocalFile(string $path): array
     {
-        if (!file_exists($path)) {
-            throw new \Exception("Local file does not exist: $path");
-        }
         $content = @file_get_contents($path);
         if ($content === false) {
             throw new \Exception("Could not read local file: $path");
         }
-        return $this->fromJson($content);
+        return $this->_fromJson($content);
     }
 
     public function saveLocalFile(string $path, array $content): void
     {
-        $jsonContent = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if ($jsonContent === false) {
+        $json = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if ($json === false) {
             throw new \Exception("Could not encode content to JSON");
         }
-        $result = @file_put_contents($path, $jsonContent);
+        $result = @file_put_contents($path, $json);
         if ($result === false) {
             throw new \Exception("Could not write to local file: $path");
         }

@@ -9,10 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class SemverTransformTest extends TestCase
 {
-    protected function setUp(): void
-    {
-    }
-
     #[TestDox('class can be instantiated')]
     public function testClassCanBeInstantiated()
     {
@@ -20,8 +16,8 @@ class SemverTransformTest extends TestCase
         $this->assertInstanceOf(SemverTransform::class, $transform);
     }
 
-    #[TestDox('Add missing dependencies')]
-    public function testAddMissingDependencies()
+    #[TestDox('Add properties')]
+    public function testAddProperties()
     {
         $transform = new SemverTransform();
 
@@ -43,15 +39,16 @@ class SemverTransformTest extends TestCase
         );
     }
 
-    #[TestDox('Update existing dependencies')]
-    public function testUpdateExistingDependencies()
+    #[TestDox('Update properties')]
+    public function testUpdateProperties()
     {
         $transform = new SemverTransform();
 
         $result = $transform->transform(
             [
             // Reference
-            "libraryA" => "2.0.0",
+            "libraryA" => "^2.0.1",
+            "libraryB" => "1.0.0",
             ], [
             // Target
             "libraryA" => "1.0.0",
@@ -61,14 +58,14 @@ class SemverTransformTest extends TestCase
         $this->assertEquals(
             [
             // Target after transform
-            "libraryA" => "2.0.0",
+            "libraryA" => "^2.0.1",
             "libraryB" => "2.0.0",
             ], $result
         );
     }
 
-    #[TestDox('Ignore existing dependencies')]
-    public function testIgnoreExistingDependencies()
+    #[TestDox('Ignore existing properties')]
+    public function testIgnoreProperties()
     {
         $transform = new SemverTransform();
 
