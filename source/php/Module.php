@@ -10,43 +10,52 @@ use App\Contracts\TransformInterface;
 
 class Module
 {
-    public static function exec()
+    public static function exec(string $configPath)
     {
         $fileService = new FileService();
-        $config = new ConfigService($fileService);
+        
+        $config = new ConfigService(
+            $fileService->load($configPath)
+        );
 
         // Get each file configuration
         foreach ($config->getConfig() as $file => $transforms){
-            echo "Checking {$file}\n";
+            echo "Processing {$file}\n";
 
             // Try load localfile
             try {
-                $local = $fileService->fetchLocalFile(
+                $local = $fileService->load(
                     BASE_PATH . $file
                 );
             } catch (\Exception $e) {
-                echo "Could not fetch local file {$file}, creating new\n";
+                echo "FAILED to load local file, creating new\n";
                 $local = [];
             }
             
             // Try load remotefile
             try {
-                $remote = $fileService->fetchRemoteFile(
-                    $config->getRemoteRepoPath(), 
-                    $file
+                $remote = $fileService->load(
+                    REPO_PATH . $file
                 );
             } catch (\Exception $e) {
-                echo "Could not fetch remote file {$file} from repo ".$config->getRemoteRepoPath()."\n";
+                echo "FAILED to load remote file, ignoring\n";
                 continue;
             }
 
             // Transform each key using the specified transform class
             foreach ($transforms as $key => $value) {
                 if(!isset($remote[$key])) {
+                    echo " - Key {$key} does not exist in remote file, ignoring\n";
                     continue;
                 }
-                echo " - Transforming {$key} using {$value}\n";
                 $transform = "App\\Transforms\\{$value}";
+
+                if (!class_exists($transform)) {
+                    echo " - Transform class {$transform} does not exist, ignoring\n";
+                    continue;
+                }
+
+                echo " - Transforming {$key} using {$value}\n";
             
                 /**
                 * @var TransformInterface $comparer 
@@ -59,7 +68,7 @@ class Module
                 );
                 
             }
-            $fileService->saveLocalFile(
+            $fileService->save(
                 BASE_PATH . $file,
                 $local
             );

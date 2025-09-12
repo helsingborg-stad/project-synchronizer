@@ -5,8 +5,7 @@ namespace App\Contracts;
 
 interface FileServiceInterface
 {
-    public function fetchRemoteFile(string $repo, string $path): array;
-    public function fetchLocalFile(string $path): array;
-    public function saveLocalFile(string $path, array $content): void;
+    public function load(string $path): array;
+    public function save(string $path, array $content): void;
 }
 

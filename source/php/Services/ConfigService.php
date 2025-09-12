@@ -4,23 +4,15 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\ConfigServiceInterface;
-use App\Contracts\FileServiceInterface;
 
 class ConfigService implements ConfigServiceInterface
 {
     private array $_config = [];
-    // The base path of the remote repository containing the master files
-    // This will not likely ever change, but if it does, you can update it here
-    private string $_repoPath = 
-        "https://raw.githubusercontent.com/helsingborg-stad/project-synchronizer/refs/heads/main";
 
-    public function __construct(FileServiceInterface $fileService)
+    public function __construct(array $config)
     {
         $this->_config = $this->_normalize(
-            $fileService->fetchRemoteFile(
-                $this->_repoPath, 
-                '/config.json'
-            )
+            $config
         );
     }
 
@@ -36,11 +28,6 @@ class ConfigService implements ConfigServiceInterface
 
     public function getConfig(): array
     {
-        return $this->_config ?? []; 
-    }
- 
-    public function getRemoteRepoPath(): string
-    {
-        return $this->_repoPath;
-    }
+        return $this->_config; 
+    } 
 }

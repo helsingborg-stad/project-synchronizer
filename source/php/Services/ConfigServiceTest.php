@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Services\Tests;
 
 use App\Services\ConfigService;
-use App\Services\NullFileService;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +13,9 @@ class ConfigServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = new ConfigService(new NullFileService());
+        $this->config = new ConfigService([
+            "null" => null
+        ]);
     }
 
     #[TestDox('class can be instantiated')]

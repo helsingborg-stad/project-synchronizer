@@ -6,6 +6,5 @@ namespace App\Contracts;
 interface ConfigServiceInterface
 {
     public function getConfig(): array;
-    public function getRemoteRepoPath(): string;
 }
 

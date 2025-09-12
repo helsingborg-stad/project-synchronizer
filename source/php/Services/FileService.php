@@ -16,25 +16,16 @@ class FileService implements FileServiceInterface
         return $json;
     }
     
-    public function fetchRemoteFile(string $repo, string $path): array
-    {
-        $content = @file_get_contents($repo . $path);
-        if ($content === false) {
-            throw new \Exception("Could not read remote file: $path");
-        }
-        return $this->_fromJson($content);
-    }
-
-    public function fetchLocalFile(string $path): array
+    public function load(string $path): array
     {
         $content = @file_get_contents($path);
         if ($content === false) {
-            throw new \Exception("Could not read local file: $path");
+            throw new \Exception("Could not read file: $path");
         }
         return $this->_fromJson($content);
     }
 
-    public function saveLocalFile(string $path, array $content): void
+    public function save(string $path, array $content): void
     {
         $json = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if ($json === false) {

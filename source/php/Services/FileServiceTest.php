@@ -22,17 +22,10 @@ class FileServiceTest extends TestCase
         $this->assertInstanceOf(FileService::class, $this->service);
     }
 
-    #[TestDox('throws exception on invalid remote file')]
-    public function testThrowsExceptionOnInvalidRemoteFile()
+    #[TestDox('throws exception on invalid file')]
+    public function testThrowsExceptionOnInvalidFile()
     {
         $this->expectException(\Exception::class);
-        $this->service->fetchRemoteFile('invalid-repo', '/invalid-path');
-    }
-
-    #[TestDox('throws exception on invalid local file')]
-    public function testThrowsExceptionOnInvalidLocalFile()
-    {
-        $this->expectException(\Exception::class);
-        $this->service->fetchLocalFile('/invalid-path');
+        $this->service->load('/path/to/nonexistent/file.json');
     }
 }
