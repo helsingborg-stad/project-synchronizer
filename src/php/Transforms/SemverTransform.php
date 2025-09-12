@@ -7,7 +7,7 @@ use App\Contracts\TransformInterface;
 use App\Utils\Semver;
 
 class SemverTransform implements TransformInterface {
-    public function transform($reference, $target): array {
+    public function transform($reference, $target): mixed {
         foreach ($reference as $name => $value) {
             if(!isset($target[$name]) || Semver::isLessThan($target[$name], $value)) {
                 $target[$name] = $value;

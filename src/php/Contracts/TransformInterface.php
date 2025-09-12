@@ -5,6 +5,6 @@ namespace App\Contracts;
 
 interface TransformInterface
 {
-    public function transform($reference, $target): array;
+    public function transform($reference, $target): mixed;
 }
 
