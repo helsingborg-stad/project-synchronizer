@@ -8,16 +8,18 @@ use App\Services\ConfigService;
 use App\Services\FileService;
 use App\Contracts\TransformInterface;
 
-class Module {
-    public static function exec() {
+class Module
+{
+    public static function exec()
+    {
         $fileService = new FileService();
         $config = new ConfigService($fileService);
 
-        # Get each file configuration
+        // Get each file configuration
         foreach ($config->getConfig() as $file => $transforms){
             echo "Checking {$file}\n";
 
-            # Try load localfile
+            // Try load localfile
             try {
                 $local = $fileService->fetchLocalFile(
                     BASE_PATH . $file
@@ -27,7 +29,7 @@ class Module {
                 $local = [];
             }
             
-            # Try load remotefile
+            // Try load remotefile
             try {
                 $remote = $fileService->fetchRemoteFile(
                     $config->getRemoteRepoPath(), 
@@ -45,7 +47,9 @@ class Module {
                 echo " - Transforming {$key} using {$value}\n";
                 $transform = "App\\Transforms\\{$value}";
             
-                /** @var TransformInterface $comparer */
+                /**
+ * @var TransformInterface $comparer 
+*/
                 $comparer = new $transform();
 
                 $local[$key] = $comparer->transform(

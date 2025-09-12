@@ -7,7 +7,8 @@ use App\Contracts\FileServiceInterface;
 
 class FileService implements FileServiceInterface
 {
-    protected function fromJson($content): array {
+    protected function fromJson($content): array
+    {
         $json = json_decode($content, true);
         if($json === null) {
             throw new \Exception("Invalid JSON content");
@@ -15,7 +16,8 @@ class FileService implements FileServiceInterface
         return $json;
     }
     
-    public function fetchRemoteFile(string $repo, string $path): array {
+    public function fetchRemoteFile(string $repo, string $path): array
+    {
         $content = @file_get_contents($repo . $path);
         if ($content === false) {
             throw new \Exception("Could not fetch remote file: $path");
@@ -35,7 +37,8 @@ class FileService implements FileServiceInterface
         return $this->fromJson($content);
     }
 
-    public function saveLocalFile(string $path, array $content): void {
+    public function saveLocalFile(string $path, array $content): void
+    {
         $jsonContent = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if ($jsonContent === false) {
             throw new \Exception("Could not encode content to JSON");

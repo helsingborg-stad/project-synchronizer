@@ -10,11 +10,11 @@
 
   <coverage processUncoveredFiles="true">
     <include>
-      <directory suffix=".php">./src</directory>
+      <directory suffix=".php">./source</directory>
       <directory suffix=".php">./generator</directory>
     </include>
     <exclude>
-      <directory suffix="Test.php">./src</directory>
+      <directory suffix="Test.php">./source</directory>
       <directory suffix="Test.php">./generator</directory>
     </exclude>
     <report>
@@ -26,7 +26,7 @@
 
   <testsuites>
     <testsuite name="Unit Test Suite">
-      <directory suffix="Test.php">./src</directory>
+      <directory suffix="Test.php">./source</directory>
     </testsuite>
   </testsuites>
 </phpunit>

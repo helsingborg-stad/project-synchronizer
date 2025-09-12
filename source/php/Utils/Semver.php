@@ -40,8 +40,10 @@ class Semver
             $aPart = intval($a[$i] ?? 0);
             $bPart = intval($b[$i] ?? 0);
 
-            if ($aPart > $bPart) return true;
-            if ($aPart < $bPart) return false;
+            if ($aPart > $bPart) { return true;
+            }
+            if ($aPart < $bPart) { return false;
+            }
         }
 
         return false; // versions are equal
