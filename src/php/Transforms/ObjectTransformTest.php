@@ -51,4 +51,20 @@ class ObjectTransformTest extends TestCase {
             "NameA" => "ValueA",
         ], $result);
     }
+    #[TestDox('Update single property')]
+    public function testUpdateSingleProperty() {
+        $transform = new ObjectTransform();
+
+        $result = $transform->transform(
+            // Reference
+            "ValueA"
+        ,
+            // Target
+            "ValueB"
+        );
+        $this->assertEquals(
+            // Target after transform
+            "ValueA"
+        , $result);
+    }
 }
