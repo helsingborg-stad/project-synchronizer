@@ -1,5 +1,5 @@
 {
-	"name": "project-synchronizer",
+	"name": "@helsingborg-stad/project-synchronizer",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
