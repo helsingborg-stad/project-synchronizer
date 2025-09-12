@@ -1,67 +1,67 @@
 {
-    "name": "municipio-dependency-master",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "engines": {
-        "node": ">=20.0.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/helsingborg-stad/municipio-dependency-master.git"
-    },
-    "author": "",
-    "bugs": {
-        "url": "https://github.com/helsingborg-stad/municipio-dependency-master/issues"
-    },
-    "homepage": "https://github.com/helsingborg-stad/municipio-dependency-master#readme",
-    "scripts": {
-        "test": "jest --coverage --maxWorkers=50%",
-        "dev": "vite",
-        "build": "vite build",
-        "build:dev": "vite build --mode development",
-        "watch": "vite build --watch --mode development",
-        "format": "npx biome format ./source",
-        "format:write": "npx biome format ./source --write",
-        "lint": "npx biome lint ./source",
-        "lint:write": "npx biome lint ./source --write"
-    },
-    "browserslist": [
-        "> 1%",
-        "not dead"
-    ],
-    "devDependencies": {
-        "@biomejs/biome": "2.2.2",
-        "@types/jest": "^30.0.0",
-        "autoprefixer": "^10.4.20",
-        "jest": "^30.1.3",
-        "jest-environment-jsdom": "^30.1.2",
-        "ts-jest": "^29.4.1",
-        "typescript": "^5.9.2",
-        "vite": "^7.1.2"
-    },
-    "jest": {
-        "testEnvironment": "jsdom",
-        "transform": {
-            "^.+\\.(js|ts)$": "ts-jest"
-        },
-        "collectCoverageFrom": [
-            "source/**/*.js",
-            "source/**/*.ts"
-        ],
-        "moduleFileExtensions": [
-            "js",
-            "ts"
-        ],
-        "testMatch": [
-            "**/*.test.(js|ts)"
-        ],
-        "transformIgnorePatterns": [
-            "node_modules/(?!(.*\\.mjs$))"
-        ]
-    },
-    "dependencies": {
-        "vite-config-factory": "^1.0.1"
-    },
-    "license": "MIT"
+	"name": "project-synchronizer",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"engines": {
+		"node": ">=20.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/helsingborg-stad/project-synchronizer.git"
+	},
+	"author": "",
+	"bugs": {
+		"url": "https://github.com/helsingborg-stad/project-synchronizer/issues"
+	},
+	"homepage": "https://github.com/helsingborg-stad/project-synchronizer#readme",
+	"scripts": {
+		"test": "jest --coverage --maxWorkers=50%",
+		"dev": "vite",
+		"build": "vite build",
+		"build:dev": "vite build --mode development",
+		"watch": "vite build --watch --mode development",
+		"format": "npx biome format ./source",
+		"format:write": "npx biome format ./source --write",
+		"lint": "npx biome lint ./source",
+		"lint:write": "npx biome lint ./source --write"
+	},
+	"browserslist": [
+		"> 1%",
+		"not dead"
+	],
+	"devDependencies": {
+		"@biomejs/biome": "2.2.2",
+		"@types/jest": "^30.0.0",
+		"autoprefixer": "^10.4.20",
+		"jest": "^30.1.3",
+		"jest-environment-jsdom": "^30.1.2",
+		"ts-jest": "^29.4.1",
+		"typescript": "^5.9.2",
+		"vite": "^7.1.2"
+	},
+	"jest": {
+		"testEnvironment": "jsdom",
+		"transform": {
+			"^.+\\.(js|ts)$": "ts-jest"
+		},
+		"collectCoverageFrom": [
+			"source/**/*.js",
+			"source/**/*.ts"
+		],
+		"moduleFileExtensions": [
+			"js",
+			"ts"
+		],
+		"testMatch": [
+			"**/*.test.(js|ts)"
+		],
+		"transformIgnorePatterns": [
+			"node_modules/(?!(.*\\.mjs$))"
+		]
+	},
+	"dependencies": {
+		"vite-config-factory": "^1.0.1"
+	},
+	"license": "MIT"
 }

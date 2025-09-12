@@ -12,7 +12,7 @@ class ConfigService implements ConfigServiceInterface
     // The base path of the remote repository containing the master files
     // This will not likely ever change, but if it does, you can update it here
     private string $_repoPath = 
-        "https://raw.githubusercontent.com/helsingborg-stad/municipio-dependency-master/refs/heads/main";
+        "https://raw.githubusercontent.com/helsingborg-stad/project-synchronizer/refs/heads/main";
 
     public function __construct(FileServiceInterface $fileService)
     {
