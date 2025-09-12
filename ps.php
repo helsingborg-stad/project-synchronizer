@@ -10,4 +10,10 @@ define('REPO_PATH', 'https://raw.githubusercontent.com/helsingborg-stad/project-
 require BASE_PATH . '/vendor/autoload.php';
 
 # Run the application
-App\Module::exec(REPO_PATH . '/config.json');
+$cmd = (object) array_merge([
+    "config" => REPO_PATH . '/config.json',
+], getopt("", [
+    "config:",
+]));
+
+App\Module::exec($cmd->config);
