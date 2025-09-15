@@ -1,6 +1,6 @@
 <?php
 # Sets the base path for the application to avoid tricky relative drilling
-define('BASE_PATH', __DIR__);
+define('BASE_PATH', getcwd());
 
 // The base path of the remote repository containing the master files
 // This will not likely ever change, but if it does, you can update it here
