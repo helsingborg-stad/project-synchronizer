@@ -1,26 +1,18 @@
 {
-	"/package.json": {
-		"license": "ObjectTransform",
-		"dependencies": "SemverTransform",
-		"devDependencies": "SemverTransform",
-		"scripts": "ObjectTransform",
-		"engines": "SemverTransform",
-		"jest": "ObjectTransform"
-	},
-	"/composer.json": {
-		"require": "SemverTransform",
-		"require-dev": "SemverTransform",
-		"scripts": "ObjectTransform"
-	},
-	"/tsconfig.json": {
-		"compilerOptions": "ObjectTransform"
-	},
-	"/.vscode/settings.json": {
-		"editor.formatOnSave": "ObjectTransform",
-		"editor.defaultFormatter": "ObjectTransform",
-		"editor.codeActionsOnSave": "ObjectTransform"
-	},
-	"/.vscode/extensions.json": {
-		"recommendations": "ObjectTransform"
-	}
+	"/package.json": [
+		"license",
+		"dependencies",
+		"devDependencies",
+		"scripts",
+		"engines",
+		"jest"
+	],
+	"/composer.json": ["require", "require-dev", "scripts"],
+	"/tsconfig.json": ["compilerOptions"],
+	"/.vscode/settings.json": [
+		"editor.formatOnSave",
+		"editor.defaultFormatter",
+		"editor.codeActionsOnSave"
+	],
+	"/.vscode/extensions.json": ["recommendations"]
 }

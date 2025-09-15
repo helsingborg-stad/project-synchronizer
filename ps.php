@@ -13,7 +13,18 @@ require BASE_PATH . '/vendor/autoload.php';
 $cmd = (object) array_merge([
     "config" => REPO_PATH . '/config.json',
 ], getopt("", [
+    "help",
     "config:",
 ]));
 
-App\Module::exec($cmd->config);
+# Display help if requested
+if (isset($cmd->help)) {
+    echo <<<TEXT
+        Usage: php ps.php
+            --config <file|url>            Input config file or URL
+        TEXT;
+    exit(1);
+}
+
+# Run the module
+App\Module::exec($cmd);
