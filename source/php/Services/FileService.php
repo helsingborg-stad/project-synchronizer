@@ -7,34 +7,50 @@ use App\Contracts\FileServiceInterface;
 
 class FileService implements FileServiceInterface
 {
-    private function _fromJson($content): array
-    {
-        $json = json_decode($content, true);     
-        if($json === null) {
-            throw new \Exception("Invalid JSON content");
-        }
-        return $json;
-    }
-    
-    public function load(string $path): array
+    public function loadText(string $path): string
     {
         $content = @file_get_contents($path);
         if ($content === false) {
-            throw new \Exception("Could not read file: $path");
+            throw new \Exception("Failed to read from file: $path");
         }
-        return $this->_fromJson($content);
+        return $content;
     }
 
-    public function save(string $path, array $content): void
+    public function saveText(string $path, string $content): void
     {
-        $json = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if ($json === false) {
-            throw new \Exception("Could not encode content to JSON");
-        }
-        $result = @file_put_contents($path, $json);
+        $result = @file_put_contents($path, $content);
         if ($result === false) {
-            throw new \Exception("Could not write to local file: $path");
+            throw new \Exception("Failed to write to file: $path");
         }
+    }
+    public function loadJSON(string $path): array
+    {
+        $json = json_decode($this->loadText($path), true);
+        if($json === null) {
+            throw new \Exception("Failed to decode JSON from file: $path");
+        }
+        return $json;
+    }
+
+    public function saveJSON(string $path, array $json): void
+    {
+        $content = json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if ($content === false) {
+            throw new \Exception("Failed to encode JSON for file: $path");
+        }
+        $this->saveText($path, $content);
+    }
+
+    public function exists(string $path): bool
+    {
+        return file_exists($path);
+    }
+
+    public function copy(string $source, string $destination, bool $overwrite): void {
+        if (!$overwrite && $this->exists($destination)) {
+            throw new \Exception("File already exists: $destination");
+        }
+        $this->saveText($destination, $this->loadText($source));
     }
 }
 

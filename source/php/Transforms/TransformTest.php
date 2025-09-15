@@ -4,24 +4,30 @@ declare(strict_types=1);
 namespace App\Services\Tests;
 
 use App\Transforms\Transform;
+use App\Services\NullLoggerService;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 class TransformTest extends TestCase
 {
+    private $transform = null;
+
+    protected function setUp(): void
+    {
+        $this->transform = new Transform(new NullLoggerService());
+    }
+
+
     #[TestDox('class can be instantiated')]
     public function testClassCanBeInstantiated()
     {
-        $transform = new Transform();
-        $this->assertInstanceOf(Transform::class, $transform);
+        $this->assertInstanceOf(Transform::class, $this->transform);
     }
 
     #[TestDox('Add semver properties')]
     public function testAddSemverProperties()
     {
-        $transform = new Transform();
-
-        $result = $transform->transform(
+        $result = $this->transform->transform(
             [
             // Reference
             "libraryA" => "1.0.0",
@@ -42,9 +48,7 @@ class TransformTest extends TestCase
     #[TestDox('Update semver properties')]
     public function testUpdateSemverProperties()
     {
-        $transform = new Transform();
-
-        $result = $transform->transform(
+        $result = $this->transform->transform(
             [
             // Reference
             "libraryA" => "^2.0.1",
@@ -67,9 +71,7 @@ class TransformTest extends TestCase
     #[TestDox('Ignore existing properties')]
     public function testIgnoreProperties()
     {
-        $transform = new Transform();
-
-        $result = $transform->transform(
+        $result = $this->transform->transform(
             [
             // Reference
             "libraryA" => "2.0.0",
@@ -91,9 +93,7 @@ class TransformTest extends TestCase
     #[TestDox('Add string properties')]
     public function testAddStringProperties()
     {
-        $transform = new Transform();
-
-        $result = $transform->transform(
+        $result = $this->transform->transform(
             [
             // Reference
             "NameA" => "ValueA",
@@ -114,9 +114,7 @@ class TransformTest extends TestCase
     #[TestDox('Update string properties')]
     public function testUpdateStringProperties()
     {
-        $transform = new Transform();
-
-        $result = $transform->transform(
+        $result = $this->transform->transform(
             [
             // Reference
             "NameA" => "ValueA",
@@ -135,9 +133,7 @@ class TransformTest extends TestCase
     #[TestDox('Add or update string value')]
     public function testAddOrUpdateStringValue()
     {
-        $transform = new Transform();
-
-        $result = $transform->transform(
+        $result = $this->transform->transform(
             // Reference
             "ValueA",
             // Target

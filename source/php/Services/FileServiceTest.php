@@ -26,6 +26,6 @@ class FileServiceTest extends TestCase
     public function testThrowsExceptionOnInvalidFile()
     {
         $this->expectException(\Exception::class);
-        $this->service->load('/path/to/nonexistent/file.json');
+        $this->service->loadJSON('/path/to/nonexistent/file.json');
     }
 }

@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace App\Transforms;
 
 use App\Contracts\TransformInterface;
+use App\Contracts\LoggerServiceInterface;
 use Composer\Semver\VersionParser;
 
 class Transform implements TransformInterface
 {
+    public function __construct(private LoggerServiceInterface $log) {}
+
     private function getLowerBounds($v1, $v2): null|array {
         try {
             $parser = new VersionParser();
@@ -45,7 +48,7 @@ class Transform implements TransformInterface
         // Array or Object
         if (is_array($reference) || is_object($reference)) {        
             foreach ($reference as $name => $value) {
-                // Not set in target
+                // Set new target value (add or update existing)
                 $target[$name] = $this->update($value, $target[$name] ?? null);
             }
             return $target;

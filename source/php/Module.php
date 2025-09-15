@@ -13,57 +13,114 @@ class Module
 {
     public static function exec(object $cmd)
     {
-        $logService = new ConsoleLoggerService();
-        $fileService = new FileService();
-        
-        $config = new ConfigService(
-            $fileService->load($cmd->config),
-            $logService
+        // Create services
+        $log = new ConsoleLoggerService();
+        $fs = new FileService();
+        $transform = new Transform($log);
+        $conf = new ConfigService(
+            $fs->loadJSON($cmd->config),
+            $log
         );
 
-        // Get each file configuration
-        foreach ($config->getConfig() as $file => $transforms){
-            $logService->write("Processing {$file}");
+      /** 
+       * Process files
+       * In the below example, the files processed are 
+       * /package.json and /composer.json
+       * 
+       * Example config:
+       *   {
+       *       "/package.json": [...],
+       *       "/composer.json": [...],
+       *       "....": [...]
+       *   }
+       */
+        foreach ($conf->getConfig() as $file => $properties){
+            // Track progress
+            $log->write("Processing {$file}");
 
-            // Try load localfile
-            try {
-                $local = $fileService->load(
-                    BASE_PATH . $file
-                );
-            } catch (\Exception $e) {
-                $logService->write("FAILED to load local file, creating new");
-                $local = [];
-            }
-            
-            // Try load remotefile
-            try {
-                $remote = $fileService->load(
-                    REPO_PATH . $file
-                );
-            } catch (\Exception $e) {
-                $logService->write("FAILED to load remote file, ignoring");
+            // Define fully qualified paths for local and remote files
+            $lFile = BASE_PATH . $file;
+            $rFile = REPO_PATH . $file;
+
+            // An empty property list means an intent to copy the whole file
+            // The file is only copied if it does not exist locally already. 
+            // Since no transform will take place, this will allow any textbased 
+            // filetype to be copied from remote to local
+            if(empty($properties)) {
+                try {
+                    $log->write(" - No properties configured, attempting to copy whole file");
+                    // Perform copy
+                    $remote = $fs->copy(
+                        $rFile,
+                        $lFile,
+                        false
+                    );
+                } catch (\Exception $e) {
+                    // Write error to log, but continue processing other files
+                    $log->write(" - {$e->getMessage()}");
+                }
                 continue;
             }
 
-            // Transform each key using the specified transform class
-            foreach ($transforms as $key) {
+            /**
+             * Only JSON based files can be transformed
+             */
+            try {
+                // Try load remotefile
+                $remote = $fs->loadJSON($rFile);
+            } catch (\Exception $e) {
+                // Write error to log, but continue processing other files
+                $log->write(
+                    " - {$e->getMessage()}. " .
+                    "If the file is missing in remote, and this is intentional, please remove the file from the configuration."
+                );
+                continue;
+            }
+
+            try {
+                // Try load localfile
+                $local = $fs->loadJSON($lFile);
+            } catch (\Exception $e) {
+                // Write error to log, but continue processing
+                $log->write(
+                    " - {$e->getMessage()}. " . 
+                    "The configured properties will be copied from remote into a new file"
+                );
+                $local = [];
+            }
+            
+            /**
+             * Example properties
+             * {
+             *      "/...": [
+             *          "require", 
+             *          "require-dev", 
+             *          "scripts"
+             *      ]
+             * }
+             */
+            foreach ($properties as $key) {
+                // Configured key does not exist in remote file
                 if(!isset($remote[$key])) {
-                    $logService->write(" - Key {$key} does not exist in remote file, ignoring");
+                    $log->write(
+                        " - Key {$key} does not exist in remote file. " . 
+                        "If this is intentional, please remove the property from the configuration."
+                    );
                     continue;
                 }
+                // Track progress
+                $log->write(" - Transforming {$key}");
 
-                $logService->write(" - Transforming {$key}");
-
-                $comparer = new Transform();
-
-                $local[$key] = $comparer->transform(
+                // Apply transformation
+                $local[$key] = $transform->transform(
                     $remote[$key],
                     $local[$key] ?? []
                 );
                 
             }
-            $fileService->save(
-                BASE_PATH . $file,
+            // Write changes to local file
+            $fs->saveJSON(
+                $lFile,
                 $local
             );
         }
