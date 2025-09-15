@@ -16,7 +16,7 @@
         ]
     },
     "include": [
-        "src/js/**/*",
+        "source/js/**/*",
         "global.d.ts"
     ]
 }

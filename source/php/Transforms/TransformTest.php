@@ -24,8 +24,8 @@ class TransformTest extends TestCase
         $this->assertInstanceOf(Transform::class, $this->transform);
     }
 
-    #[TestDox('Add semver properties')]
-    public function testAddSemverProperties()
+    #[TestDox('Add missing semver properties')]
+    public function testAddMissingSemverProperties()
     {
         $result = $this->transform->transform(
             [
@@ -45,8 +45,8 @@ class TransformTest extends TestCase
         );
     }
 
-    #[TestDox('Update semver properties')]
-    public function testUpdateSemverProperties()
+    #[TestDox('Upgrade existing semver properties')]
+    public function testUpgradeExistingSemverProperties()
     {
         $result = $this->transform->transform(
             [
@@ -68,13 +68,13 @@ class TransformTest extends TestCase
         );
     }
 
-    #[TestDox('Ignore existing properties')]
-    public function testIgnoreProperties()
+    #[TestDox('Avoid downgrading versions')]
+    public function testAvoidDowngradingVersions()
     {
         $result = $this->transform->transform(
             [
             // Reference
-            "libraryA" => "2.0.0",
+            "libraryA" => "1.0.0",
             ], [
             // Target
             "libraryA" => "2.0.0",
@@ -90,8 +90,8 @@ class TransformTest extends TestCase
         );
     }
     
-    #[TestDox('Add string properties')]
-    public function testAddStringProperties()
+    #[TestDox('Add missing string properties')]
+    public function testAddMissingStringProperties()
     {
         $result = $this->transform->transform(
             [
@@ -111,8 +111,8 @@ class TransformTest extends TestCase
         );
     }
 
-    #[TestDox('Update string properties')]
-    public function testUpdateStringProperties()
+    #[TestDox('Retain existing string properties')]
+    public function testRetainStringProperties()
     {
         $result = $this->transform->transform(
             [
@@ -126,12 +126,12 @@ class TransformTest extends TestCase
         $this->assertEquals(
             [
             // Target after transform
-            "NameA" => "ValueA",
+            "NameA" => "ValueA_Old",
             ], $result
         );
     }
-    #[TestDox('Add or update string value')]
-    public function testAddOrUpdateStringValue()
+    #[TestDox('Retain existing string value')]
+    public function testRetainExistingStringValue()
     {
         $result = $this->transform->transform(
             // Reference
@@ -141,8 +141,41 @@ class TransformTest extends TestCase
         );
         $this->assertEquals(
             // Target after transform
+            "ValueB",
+            $result
+        );
+    }
+
+    #[TestDox('Add missing string value')]
+    public function testAddMissingStringValue()
+    {
+        $result = $this->transform->transform(
+            // Reference
+            "ValueA",
+            // Target
+            null
+        );
+        $this->assertEquals(
+            // Target after transform
             "ValueA",
             $result
         );
     }
+
+    #[TestDox('Update semver value')]
+    public function testUpdateSemverValue()
+    {
+        $result = $this->transform->transform(
+            // Reference
+            "2.0.0",
+            // Target
+            "1.0.0"
+        );
+        $this->assertEquals(
+            // Target after transform
+            "2.0.0",
+            $result
+        );
+    }
+
 }

@@ -36,7 +36,7 @@ class Module
             $log->write("Processing {$file}");
 
             // Define fully qualified paths for local and remote files
-            $lFile = BASE_PATH . $file;
+            $lFile = $cmd->base . $file;
             $rFile = $cmd->source . $file;
 
             // An empty property list means an intent to copy the whole file

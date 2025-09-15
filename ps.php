@@ -14,6 +14,7 @@ require BASE_PATH . '/vendor/autoload.php';
 $cmd = (object) array_merge([
     "config" => CONFIG_PATH,
     "source" => REPO_PATH,
+    "base" => BASE_PATH,
     "overwrite" => true,
 ], getopt("", [
     "config:",

@@ -28,4 +28,10 @@ class FileServiceTest extends TestCase
         $this->expectException(\Exception::class);
         $this->service->loadJSON('/path/to/nonexistent/file.json');
     }
+    #[TestDox('throws exception on existing file')]
+    public function testThrowsExceptionOnExistingFile()
+    {
+        $this->expectException(\Exception::class);
+        $this->service->copy(__FILE__, __FILE__, false);
+    }
 }
