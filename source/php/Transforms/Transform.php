@@ -38,6 +38,16 @@ class Transform implements TransformInterface
             if (!is_null($v1) && $v1 > $v2) {
                 return $reference;
             }
+        } 
+        // Experimental: Merge sub-array values
+        elseif(is_array($reference)) {
+            if(array_is_list($reference)) {
+                return array_values(array_unique(
+                    array_merge($reference, $target)
+                ));
+            } else {
+                return $this->transform($reference, $target);
+            }
         }
         // Leave target value by default
         return $target;
