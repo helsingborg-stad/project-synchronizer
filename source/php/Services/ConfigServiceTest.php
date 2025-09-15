@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services\Tests;
 
 use App\Services\ConfigService;
+use App\Services\NullLoggerService;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +16,7 @@ class ConfigServiceTest extends TestCase
     {
         $this->config = new ConfigService([
             "null" => null
-        ]);
+        ], new NullLoggerService());
     }
 
     #[TestDox('class can be instantiated')]
@@ -28,9 +29,7 @@ class ConfigServiceTest extends TestCase
     public function testConfigIsLoaded()
     {
         $this->assertEquals(
-            [
-            "null" => []
-            ], $this->config->getConfig()
+            [], $this->config->getConfig()
         );
     }
 

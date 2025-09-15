@@ -5,22 +5,25 @@ declare(strict_types=1);
 namespace App;
 
 use App\Services\ConfigService;
+use App\Services\ConsoleLoggerService;
 use App\Services\FileService;
-use App\Contracts\TransformInterface;
+use App\Transforms\Transform;
 
 class Module
 {
-    public static function exec(string $configPath)
+    public static function exec(object $cmd)
     {
+        $logService = new ConsoleLoggerService();
         $fileService = new FileService();
         
         $config = new ConfigService(
-            $fileService->load($configPath)
+            $fileService->load($cmd->config),
+            $logService
         );
 
         // Get each file configuration
         foreach ($config->getConfig() as $file => $transforms){
-            echo "Processing {$file}\n";
+            $logService->write("Processing {$file}");
 
             // Try load localfile
             try {
@@ -28,7 +31,7 @@ class Module
                     BASE_PATH . $file
                 );
             } catch (\Exception $e) {
-                echo "FAILED to load local file, creating new\n";
+                $logService->write("FAILED to load local file, creating new");
                 $local = [];
             }
             
@@ -38,29 +41,20 @@ class Module
                     REPO_PATH . $file
                 );
             } catch (\Exception $e) {
-                echo "FAILED to load remote file, ignoring\n";
+                $logService->write("FAILED to load remote file, ignoring");
                 continue;
             }
 
             // Transform each key using the specified transform class
-            foreach ($transforms as $key => $value) {
+            foreach ($transforms as $key) {
                 if(!isset($remote[$key])) {
-                    echo " - Key {$key} does not exist in remote file, ignoring\n";
-                    continue;
-                }
-                $transform = "App\\Transforms\\{$value}";
-
-                if (!class_exists($transform)) {
-                    echo " - Transform class {$transform} does not exist, ignoring\n";
+                    $logService->write(" - Key {$key} does not exist in remote file, ignoring");
                     continue;
                 }
 
-                echo " - Transforming {$key} using {$value}\n";
-            
-                /**
-                * @var TransformInterface $comparer 
-                */
-                $comparer = new $transform();
+                $logService->write(" - Transforming {$key}");
+
+                $comparer = new Transform();
 
                 $local[$key] = $comparer->transform(
                     $remote[$key],
