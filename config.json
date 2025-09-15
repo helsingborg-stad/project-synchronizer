@@ -14,5 +14,6 @@
 		"editor.defaultFormatter",
 		"editor.codeActionsOnSave"
 	],
-	"/.vscode/extensions.json": ["recommendations"]
+	"/.vscode/extensions.json": ["recommendations"],
+	"/vite.config.mjs": []
 }

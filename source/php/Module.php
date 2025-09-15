@@ -16,11 +16,8 @@ class Module
         // Create services
         $log = new ConsoleLoggerService();
         $fs = new FileService();
-        $transform = new Transform($log);
-        $conf = new ConfigService(
-            $fs->loadJSON($cmd->config),
-            $log
-        );
+        $tf = new Transform($log);
+        $conf = new ConfigService($fs->loadJSON($cmd->config));
 
       /** 
        * Process files
@@ -48,12 +45,12 @@ class Module
             // filetype to be copied from remote to local
             if(empty($properties)) {
                 try {
-                    $log->write(" - No properties configured, attempting to copy whole file");
+                    $log->write(" - No properties configured, copymode enabled.");
                     // Perform copy
-                    $remote = $fs->copy(
+                    $fs->copy(
                         $rFile,
                         $lFile,
-                        false
+                        !$cmd->overwrite
                     );
                 } catch (\Exception $e) {
                     // Write error to log, but continue processing other files
@@ -101,7 +98,7 @@ class Module
              */
             foreach ($properties as $key) {
                 // Configured key does not exist in remote file
-                if(!isset($remote[$key])) {
+                if (!isset($remote[$key])) {
                     $log->write(
                         " - Key {$key} does not exist in remote file. " . 
                         "If this is intentional, please remove the property from the configuration."
@@ -112,17 +109,10 @@ class Module
                 $log->write(" - Transforming {$key}");
 
                 // Apply transformation
-                $local[$key] = $transform->transform(
-                    $remote[$key],
-                    $local[$key] ?? []
-                );
-                
+                $local[$key] = $tf->transform($remote[$key], $local[$key] ?? []);            
             }
             // Write changes to local file
-            $fs->saveJSON(
-                $lFile,
-                $local
-            );
+            $fs->saveJSON($lFile, $local);
         }
     }
 };

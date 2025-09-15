@@ -12,9 +12,11 @@ require BASE_PATH . '/vendor/autoload.php';
 # Run the application
 $cmd = (object) array_merge([
     "config" => REPO_PATH . '/config.json',
+    "overwrite" => true,
 ], getopt("", [
-    "help",
     "config:",
+    "overwrite",
+    "help",
 ]));
 
 # Display help if requested
@@ -22,6 +24,8 @@ if (isset($cmd->help)) {
     echo <<<TEXT
         Usage: php ps.php
             --config <file|url>            Input config file or URL
+            --overwrite                    Overwrite existing files when copying whole files
+            --help                         Display this help message
         TEXT;
     exit(1);
 }
