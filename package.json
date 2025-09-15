@@ -1,6 +1,6 @@
 {
     "name": "@helsingborg-stad/project-synchronizer",
-    "version": "1.0.5",
+    "version": "1.0.12",
     "description": "",
     "main": "index.js",
     "engines": {

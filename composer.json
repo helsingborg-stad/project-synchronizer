@@ -1,41 +1,41 @@
 {
-	"name": "helsingborg-stad/project-synchronizer",
-	"description": "A utitlity to synchronize projects from one repo to another",
-	"type": "library",
-	"license": "MIT",
-	"scripts": {
-		"test": "phpunit --no-coverage --testdox",
-		"test:coverage": "XDEBUG_MODE=coverage phpunit --testdox",
-		"lint": "vendor/bin/phpcs",
-		"lint:changed": "vendor/bin/phpcs-changed origin/main",
-		"fix": "vendor/bin/phpcbf",
-		"fix:changed": "vendor/bin/phpcbf-changed origin/main"
-	},
-	"authors": [
-		{
-			"name": "Petter Andersson",
-			"email": "petter.andersson@helsingborg.se"
-		}
-	],
-	"autoload": {
-		"psr-4": {
-			"App\\": "source/php/"
-		}
-	},
-	"minimum-stability": "stable",
-	"require": {
-		"helsingborg-stad/wpservice": "^2.0",
-		"helsingborg-stad/acfservice": "^1.0"
-	},
-	"require-dev": {
-		"composer/semver": "^3.4",
-		"phpunit/phpunit": "^11.5",
-		"helsingborg-stad/phpcs": "^0.2.2"
-	},
-	"config": {
-		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
-	},
-	"version": "1.0.5"
+    "name": "helsingborg-stad/project-synchronizer",
+    "description": "A utitlity to synchronize projects from one repo to another",
+    "type": "library",
+    "license": "MIT",
+    "scripts": {
+        "test": "phpunit --no-coverage --testdox",
+        "test:coverage": "XDEBUG_MODE=coverage phpunit --testdox",
+        "lint": "vendor/bin/phpcs",
+        "lint:changed": "vendor/bin/phpcs-changed origin/main",
+        "fix": "vendor/bin/phpcbf",
+        "fix:changed": "vendor/bin/phpcbf-changed origin/main"
+    },
+    "authors": [
+        {
+            "name": "Petter Andersson",
+            "email": "petter.andersson@helsingborg.se"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "source/php/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "helsingborg-stad/wpservice": "^2.0",
+        "helsingborg-stad/acfservice": "^1.0"
+    },
+    "require-dev": {
+        "composer/semver": "^3.4",
+        "phpunit/phpunit": "^11.5",
+        "helsingborg-stad/phpcs": "^0.2.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "version": "1.0.12"
 }
