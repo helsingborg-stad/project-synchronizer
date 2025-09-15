@@ -4,7 +4,8 @@
 		"dependencies": "SemverTransform",
 		"devDependencies": "SemverTransform",
 		"scripts": "ObjectTransform",
-		"engines": "SemverTransform"
+		"engines": "SemverTransform",
+		"jest": "ObjectTransform"
 	},
 	"/composer.json": {
 		"require": "SemverTransform",
@@ -18,5 +19,8 @@
 		"editor.formatOnSave": "ObjectTransform",
 		"editor.defaultFormatter": "ObjectTransform",
 		"editor.codeActionsOnSave": "ObjectTransform"
+	},
+	"/.vscode/extensions.json": {
+		"recommendations": "ObjectTransform"
 	}
 }
