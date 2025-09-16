@@ -13,4 +13,3 @@ interface FileServiceInterface
     public function exists(string $path): bool;
     public function copy(string $source, string $destination, bool $overwrite): void;
 }
-

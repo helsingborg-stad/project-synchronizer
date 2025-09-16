@@ -57,7 +57,8 @@ class FileService implements FileServiceInterface
         return file_exists($path);
     }
 
-    public function copy(string $source, string $destination, bool $overwrite): void {
+    public function copy(string $source, string $destination, bool $overwrite): void
+    {
         if (!$overwrite && $this->exists($destination)) {
             throw new \Exception("File already exists: $destination");
         }

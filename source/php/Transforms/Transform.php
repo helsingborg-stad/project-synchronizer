@@ -9,9 +9,12 @@ use Composer\Semver\VersionParser;
 
 class Transform implements TransformInterface
 {
-    public function __construct(private LoggerServiceInterface $log) {}
+    public function __construct(private LoggerServiceInterface $log)
+    {
+    }
 
-    private function getLowerBounds($v1, $v2): array {
+    private function getLowerBounds($v1, $v2): array
+    {
         $parser = new VersionParser();        
         return [
             $parser->parseConstraints($v1)
@@ -21,7 +24,8 @@ class Transform implements TransformInterface
         ];
     }
 
-    private function parse(string $reference, string $target): mixed {
+    private function parse(string $reference, string $target): mixed
+    {
         try {
             [$v1, $v2] = $this->getLowerBounds($reference, $target);
 
@@ -34,13 +38,16 @@ class Transform implements TransformInterface
         return $target;
     }
 
-    private function merge(array $a, ?array $b): array {
-        return array_values(array_unique(
-            array_merge($a, $b ?? [])
-        ));
+    private function merge(array $a, ?array $b): array
+    {
+        return array_values(
+            array_unique(
+                array_merge($a, $b ?? [])
+            )
+        );
     }
 
-    public function transform($reference, $target): mixed
+    public function transform(mixed $reference, mixed $target): mixed
     {
         // Target does not exist
         if (!isset($target)) {
@@ -58,7 +65,8 @@ class Transform implements TransformInterface
         if(is_array($reference) || is_object($reference)) {
             foreach ($reference as $name => $value) {
                 $target[$name] = $this->transform(
-                    $value, $target[$name]);
+                    $value, $target[$name]
+                );
             }
         }
         return $target;

@@ -17,15 +17,14 @@ class TransformTest extends TestCase
         $this->transform = new Transform(new NullLoggerService());
     }
 
-
     #[TestDox('class can be instantiated')]
     public function testClassCanBeInstantiated()
     {
         $this->assertInstanceOf(Transform::class, $this->transform);
     }
 
-    #[TestDox('Add missing semver properties')]
-    public function testAddMissingSemverProperties()
+    #[TestDox('add missing name value pairs')]
+    public function testAddMissingNameValuePairs()
     {
         $result = $this->transform->transform(
             [
@@ -41,96 +40,116 @@ class TransformTest extends TestCase
             // Target after transform
             "libraryB" => "2.0.0",
             "libraryA" => "1.0.0",
-            ], $result
-        );
-    }
-
-    #[TestDox('Upgrade existing semver properties')]
-    public function testUpgradeExistingSemverProperties()
-    {
-        $result = $this->transform->transform(
-            [
-            // Reference
-            "libraryA" => "^2.0.1",
-            "libraryB" => "1.0.0",
-            ], [
-            // Target
-            "libraryA" => "1.0.0",
-            "libraryB" => "2.0.0",
-            ]
-        );
-        $this->assertEquals(
-            [
-            // Target after transform
-            "libraryA" => "^2.0.1",
-            "libraryB" => "2.0.0",
-            ], $result
-        );
-    }
-
-    #[TestDox('Avoid downgrading versions')]
-    public function testAvoidDowngradingVersions()
-    {
-        $result = $this->transform->transform(
-            [
-            // Reference
-            "libraryA" => "1.0.0",
-            ], [
-            // Target
-            "libraryA" => "2.0.0",
-            "libraryB" => "2.0.0",
-            ]
-        );
-        $this->assertEquals(
-            [
-            // Target after transform
-            "libraryA" => "2.0.0",
-            "libraryB" => "2.0.0",
             ], $result
         );
     }
     
-    #[TestDox('Add missing string properties')]
-    public function testAddMissingStringProperties()
+    #[TestDox('add nested name value pairs')]
+    public function testAddNestedNameValuePairs()
     {
         $result = $this->transform->transform(
             [
             // Reference
-            "NameA" => "ValueA",
+            "libraryA" => [ "propertyA" => "ValueA"],
             ], [
             // Target
-            "NameB" => "ValueB",
+            "libraryA" => [ "propertyB" => "ValueB"],
             ]
         );
         $this->assertEquals(
             [
             // Target after transform
-            "NameB" => "ValueB",
-            "NameA" => "ValueA",
+            "libraryA" => [ "propertyB" => "ValueB", "propertyA" => "ValueA"]
             ], $result
         );
     }
 
-    #[TestDox('Retain existing string properties')]
-    public function testRetainStringProperties()
+    #[TestDox('upgrade nested name value pairs (semver)')]
+    public function testUpgradeNestedNameValuePairs()
     {
         $result = $this->transform->transform(
             [
             // Reference
-            "NameA" => "ValueA",
+            "libraryA" => [ "propertyA" => "~2.0"],
             ], [
             // Target
-            "NameA" => "ValueA_Old",
+            "libraryA" => [ "propertyA" => "~1.0"],
             ]
         );
         $this->assertEquals(
             [
             // Target after transform
-            "NameA" => "ValueA_Old",
+            "libraryA" => [ "propertyA" => "~2.0"]
             ], $result
         );
     }
-    #[TestDox('Retain existing string value')]
+
+    #[TestDox('upgrade name value pairs (semver)')]
+    public function testUpgradeNameValuePairs()
+    {
+        $result = $this->transform->transform(
+            [
+            // Reference
+            "libraryA" => "^2.0.1",
+            ], [
+            // Target
+            "libraryA" => "1.0.0"
+            ]
+        );
+        $this->assertEquals(
+            [
+            // Target after transform
+            "libraryA" => "^2.0.1"
+            ], $result
+        );
+    }
+
+    #[TestDox('retain name value pairs if newer (semver)')]
+    public function testRetainNewerVersions()
+    {
+        $result = $this->transform->transform(
+            [
+            // Reference
+            "libraryA" => "1.0.0"
+            ], [
+            // Target
+            "libraryA" => "2.0.0"
+            ]
+        );
+        $this->assertEquals(
+            [
+            // Target after transform
+            "libraryA" => "2.0.0",
+            ], $result
+        );
+    }
+
+    #[TestDox('retain existing name value pairs')]
+    public function testRetainNameValuePairs()
+    {
+        $result = $this->transform->transform(
+            [
+            // Reference
+            "NameA" => "ValueA_New",
+            "NameB" => false,
+            "NameC" => 2.0
+            ], [
+            // Target
+            "NameA" => "ValueA",
+            "NameB" => true,
+            "NameC" => 1.0
+            ]
+        );
+        $this->assertEquals(
+            [
+            // Target after transform
+            "NameA" => "ValueA",
+            "NameB" => true,
+            "NameC" => 1.0
+            ], $result
+        );
+    }
+    #[TestDox('retain single string value')]
     public function testRetainExistingStringValue()
     {
         $result = $this->transform->transform(
@@ -146,7 +165,7 @@ class TransformTest extends TestCase
         );
     }
 
-    #[TestDox('Add missing string value')]
+    #[TestDox('add single string value')]
     public function testAddMissingStringValue()
     {
         $result = $this->transform->transform(
@@ -162,8 +181,8 @@ class TransformTest extends TestCase
         );
     }
 
-    #[TestDox('Update semver value')]
-    public function testUpdateSemverValue()
+    #[TestDox('upgrade single semver value')]
+    public function testUpgradeSemverValue()
     {
         $result = $this->transform->transform(
             // Reference
@@ -178,8 +197,8 @@ class TransformTest extends TestCase
         );
     }
 
-    #[TestDox('Merge sub-array values')]
-    public function testMergeSubArrayValues()
+    #[TestDox('merge arrays')]
+    public function testArrayMerge()
     {
         $result = $this->transform->transform(
             // Reference
@@ -194,4 +213,34 @@ class TransformTest extends TestCase
         );
     }
 
+    #[TestDox('Merge arrays where target is missing')]
+    public function testArrayWithMissingTarget()
+    {
+        $result = $this->transform->transform(
+            // Reference
+            ["ValueA", "ValueB"],
+            // Target
+            null
+        );  
+        $this->assertEquals(
+            // Target after transform
+            ["ValueA", "ValueB"],
+            $result
+        );
+    }
+    #[TestDox('apply object where target is missing')]
+    public function testObjectWithMissingTarget()
+    {
+        $result = $this->transform->transform(
+            // Reference
+            ["ValueA" => "ValueB"],
+            // Target
+            null
+        );  
+        $this->assertEquals(
+            // Target after transform
+            ["ValueA" => "ValueB"],
+            $result
+        );
+    }
 }

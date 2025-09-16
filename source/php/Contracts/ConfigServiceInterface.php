@@ -7,4 +7,3 @@ interface ConfigServiceInterface
 {
     public function getFiles(): array;
 }
-

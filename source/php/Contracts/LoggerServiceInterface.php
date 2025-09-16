@@ -7,4 +7,3 @@ interface LoggerServiceInterface
 {
     public function write(string $row): void;
 }
-

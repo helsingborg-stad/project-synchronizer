@@ -42,18 +42,18 @@ class Module
             exit(1);
         }
 
-      /** 
-       * Process files
-       * In the below example, the files processed are 
-       * /package.json and /composer.json
-       * 
-       * Example config:
-       *   {
-       *       "/package.json": [...],
-       *       "/composer.json": [...],
-       *       "....": [...]
-       *   }
-       */
+        /** 
+         * Process files
+         * In the below example, the files processed are 
+         * /package.json and /composer.json
+         * 
+         * Example config:
+         *   {
+         *       "/package.json": [...],
+         *       "/composer.json": [...],
+         *       "....": [...]
+         *   }
+         */
         foreach ($conf->getFiles() as $file => $properties){
             // Track progress
             $log->write("Processing {$file}");
@@ -62,19 +62,19 @@ class Module
             $tFile = $cmd->target . $file;
             $sFile = $cmd->source . $file;
 
-            // An empty property list means an intent to copy the whole file
-            // The file is only copied if it does not exist locally already. 
+            // An empty property list means an intent to copy the whole file from source to target
+            // The file is only copied if it does not exist at target already (unless overwrite flag is set). 
             // Since no transform will take place, this will allow any textbased 
-            // filetype to be copied from source to target even if not JSON
+            // filetype to be copied from source to target even if it is not JSON
             if(empty($properties)) {
                 try {
-                    $log->write(" - No properties configured, attempting full file copy.");
                     // Perform copy
                     $fs->copy(
                         $sFile,
                         $tFile,
                         !$cmd->overwrite
                     );
+                    $log->write(" - File copy successful.");
                 } catch (\Exception $e) {
                     // Write error to log, but continue processing other files
                     $log->write(" - {$e->getMessage()}");
@@ -87,26 +87,26 @@ class Module
              */
             try {
                 // Try load source file
-                $remote = $fs->loadJSON($sFile);
+                $source = $fs->loadJSON($sFile);
             } catch (\Exception $e) {
                 // Write error to log, but continue processing other files
                 $log->write(
                     " - {$e->getMessage()}. " .
-                    "If the file is missing in remote, and this is intentional, please remove the file from the configuration."
+                    "If the file is missing in source. If this is intentional, please remove the reference from the configuration."
                 );
                 continue;
             }
 
             try {
                 // Try load target file, if it exists
-                $local = $fs->loadJSON($tFile);
+                $target = $fs->loadJSON($tFile);
             } catch (\Exception $e) {
                 // Write error to log, but continue processing
                 $log->write(
-                    " - {$e->getMessage()}. " . 
-                    "The configured properties will be copied from remote into a new file"
+                    " - {$e->getMessage()}. " .
+                    "A new file will be created at target."
                 );
-                $local = [];
+                $target = [];
             }
             
             /**
@@ -120,11 +120,11 @@ class Module
              * }
              */
             foreach ($properties as $key) {
-                // Configured key does not exist in remote file
-                if (!isset($remote[$key])) {
+                // Configured key does not exist in source file
+                if (!isset($source[$key])) {
                     $log->write(
                         " - Key {$key} does not exist in source file. " . 
-                        "If this is intentional, please remove the property from the configuration."
+                        "If this is intentional, please remove the reference from the configuration."
                     );
                     continue;
                 }
@@ -132,10 +132,10 @@ class Module
                 $log->write(" - Transforming {$key}");
 
                 // Apply transformation
-                $local[$key] = $tf->transform($remote[$key], $local[$key] ?? null);
+                $target[$key] = $tf->transform($source[$key], $target[$key] ?? null);
             }
             // Write changes to target file
-            $fs->saveJSON($tFile, $local);
+            $fs->saveJSON($tFile, $target);
         }
     }
 };

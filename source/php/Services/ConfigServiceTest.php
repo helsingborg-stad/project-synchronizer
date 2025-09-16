@@ -14,9 +14,12 @@ class ConfigServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = new ConfigService([
-            "null" => null
-        ], new NullLoggerService());
+        $this->config = new ConfigService(
+            [
+                "null" => null
+            ],
+            new NullLoggerService()
+        );
     }
 
     #[TestDox('class can be instantiated')]

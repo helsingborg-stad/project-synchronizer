@@ -7,4 +7,3 @@ interface TransformInterface
 {
     public function transform(mixed $reference, mixed $target): mixed;
 }
-
