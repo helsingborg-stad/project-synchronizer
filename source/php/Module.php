@@ -132,7 +132,7 @@ class Module
                 $log->write(" - Transforming {$key}");
 
                 // Apply transformation
-                $local[$key] = $tf->transform($remote[$key], $local[$key] ?? []);            
+                $local[$key] = $tf->transform($remote[$key], $local[$key] ?? null);
             }
             // Write changes to target file
             $fs->saveJSON($tFile, $local);
