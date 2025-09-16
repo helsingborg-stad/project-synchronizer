@@ -20,10 +20,10 @@ class Module
 
         $log->write(
             <<<TEXT
-            =============================
-            Project Synchronizer
-            =============================
-            
+            ============================
+            <=> Project Synchronizer <=>
+            ============================
+
             Configuration: 
             {$cmd->config}
             

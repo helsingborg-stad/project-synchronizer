@@ -8,12 +8,14 @@
 		"jest"
 	],
 	"/composer.json": ["require", "require-dev", "scripts"],
-	"/tsconfig.json": ["compilerOptions"],
+	"/tsconfig.json": ["compilerOptions", "include"],
 	"/.vscode/settings.json": [
 		"editor.formatOnSave",
 		"editor.defaultFormatter",
 		"editor.codeActionsOnSave"
 	],
 	"/.vscode/extensions.json": ["recommendations"],
-	"/vite.config.mjs": []
+	"/vite.config.mjs": [],
+	"/phpunit.xml": [],
+	"/GitVersion.yml": []
 }

@@ -1,3 +1,7 @@
 {
-	"recommendations": ["biomejs.biome"]
+    "recommendations": [
+        "biomejs.biome",
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client"
+    ]
 }
