@@ -5,6 +5,6 @@ namespace App\Contracts;
 
 interface ConfigServiceInterface
 {
-    public function getConfig(): array;
+    public function getFiles(): array;
 }
 

@@ -29,7 +29,7 @@ class ConfigServiceTest extends TestCase
     public function testConfigIsLoaded()
     {
         $this->assertEquals(
-            [], $this->config->getConfig()
+            [], $this->config->getFiles()
         );
     }
 

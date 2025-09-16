@@ -31,7 +31,7 @@ class Module
        *       "....": [...]
        *   }
        */
-        foreach ($conf->getConfig() as $file => $properties){
+        foreach ($conf->getFiles() as $file => $properties){
             // Track progress
             $log->write("Processing {$file}");
 

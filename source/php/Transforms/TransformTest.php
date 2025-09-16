@@ -178,4 +178,22 @@ class TransformTest extends TestCase
         );
     }
 
+    #[TestDox('Merge sub-array values')]
+    public function testMergeSubArrayValues()
+    {
+        $result = $this->transform->transform([
+            // Reference
+            ["ValueA", "ValueB"],
+        ], [
+            // Target
+            ["ValueC", "ValueD"]
+        ]);
+        $this->assertEquals([
+                // Target after transform
+                ["ValueA", "ValueB", "ValueC", "ValueD"]
+            ],
+            $result
+        );
+    }
+
 }
