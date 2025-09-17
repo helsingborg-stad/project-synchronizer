@@ -18,5 +18,5 @@
     "/vite.config.mjs": [],
     "/phpunit.xml": [],
     "/GitVersion.yml": [],
-    "/biome.json": ["linter", "formatter", "javascript"]
+    "/biome.json": []
 }
