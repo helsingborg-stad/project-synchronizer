@@ -9,6 +9,8 @@ use Composer\Semver\Constraint\Bound;
 
 class Transform implements TransformInterface
 {
+    public function __construct(private bool $overwrite = false) {}
+
     private function getLowerBound(string $version): Bound
     {
         return (new VersionParser())
@@ -16,7 +18,14 @@ class Transform implements TransformInterface
             ->getLowerBound();
     }
 
-    private function parse(string $source, string $target): mixed
+    private function parse(string $source, string $target): mixed {
+            if ($this->overwrite) {
+                return $source;
+            }
+            return $this->doParse($source, $target);
+        }
+
+    private function doParse(string $source, string $target): mixed
     {
         if ($source !== $target) {
             try {
@@ -37,6 +46,14 @@ class Transform implements TransformInterface
     }
 
     private function merge(array $source, array $target): array
+    {
+        if ($this->overwrite) {
+            return $source;
+        }
+        return $this->doMerge($source, $target);
+    }
+
+    private function doMerge(array $source, array $target): array
     {
         // Reference items already in target, nothing to do
         if(array_intersect($source, $target) === $source) {

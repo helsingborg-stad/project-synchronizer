@@ -14,7 +14,7 @@ class TransformTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->transform = new Transform(new NullLoggerService());
+        $this->transform = new Transform();
     }
 
     #[TestDox('class can be instantiated')]
@@ -204,7 +204,7 @@ class TransformTest extends TestCase
             // Reference
             ["ValueA", "ValueB"],
             // Target
-            ["ValueC", "ValueD"]
+            ["ValueA", "ValueC", "ValueD"]
         );
         $this->assertEquals(
             // Target after transform

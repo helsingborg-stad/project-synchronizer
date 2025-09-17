@@ -7,27 +7,33 @@ composer require helsingborg-stad/project-synchronizer
 ```
 Usage: php vendor/helsingborg-stad/project-synchronizer/ps.php
 
-    --config <file|url>            Configuration file or URL
-    --source <folder|url>          Source repository path
-    --overwrite                    Overwrite existing files when copying whole files
-    --help                         Display this help message
+	--config <file|url>            Configuration file or URL
+	--source <folder|url>          Source repository path
+	--overwrite                    Overwrite existing files and property values
+	--help                         Display this help message
 ```
 
 ## Configuration
 The composition of the configuration is quite straight forward. 
 Simply list the repo relative path of the file to align and specify which items
-to synchronize. If the item list is empty, the whole file will be downloaded.
+to synchronize. If the item list is empty, e.g "/myfile.txt": [], the complete file will 
+be transfered (see constraints of 'target files' below).
 
-The synchronization is non-destructive:
-- Additions will always be processed (e.g a dependency is missing in the local project).
-- Updates will be applied IF a field contains a semver compatible value AND the range of the
-source value is higher than the same value in the destination file.
-- Local files will only be overwritten if the --overwrite flag is activated and it is only applicable
-for file copy operations (item list is empty). 
+The synchronization is non-destructive by default:
+- Additions will always be processed (e.g a dependency is missing in the target project).
+- A target property will be replaced IF it contains a semver compatible value AND the range of the
+source value is higher than the same value in the target property.
+- Arrays will be merged and existing values preserved.
+- Existing target files will be preserved 
+
+Using the --overwrite flag will have the following implications:
+- Existing target properties will be overwritten with values of the source.
+- Target arrays will be replaced with the values of the source.
+- Existing target files will be replaced.
 
 ## An example of configuration
 Note that the last file /vite.config.mjs is not a JSON file; hence it cannot be transformed. Instead it will be copied as is
-if it doesnt exist already.
+if it didnt exist already.
 
 ````
 {
