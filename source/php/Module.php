@@ -16,7 +16,7 @@ class Module
         // Create services
         $log = new ConsoleLoggerService();
         $fs = new FileService();
-        $tf = new Transform($log);
+        $tf = new Transform();
 
         $log->write(
             <<<TEXT

@@ -4,68 +4,71 @@ declare(strict_types=1);
 namespace App\Transforms;
 
 use App\Contracts\TransformInterface;
-use App\Contracts\LoggerServiceInterface;
 use Composer\Semver\VersionParser;
+use Composer\Semver\Constraint\Bound;
 
 class Transform implements TransformInterface
 {
-    public function __construct(private LoggerServiceInterface $log)
+    private function getLowerBound(string $version): Bound
     {
+        return (new VersionParser())
+            ->parseConstraints($version)
+            ->getLowerBound();
     }
 
-    private function getLowerBounds($v1, $v2): array
+    private function parse(string $source, string $target): mixed
     {
-        $parser = new VersionParser();        
-        return [
-            $parser->parseConstraints($v1)
-                ->getLowerBound(), 
-            $parser->parseConstraints($v2)
-                ->getLowerBound()
-        ];
-    }
+        if ($source !== $target) {
+            try {
+                // Try parse values as semver (throws UnexpectedValueException if not)
+                $v1 = $this->getLowerBound($source);
+                $v2 = $this->getLowerBound($target);
 
-    private function parse(string $reference, string $target): mixed
-    {
-        try {
-            [$v1, $v2] = $this->getLowerBounds($reference, $target);
-
-            if ($v1 > $v2) {
-                return $reference;
+                // If source version is greater than target
+                if ($v1 > $v2) {
+                    return $source;
+                }
+            } catch (\UnexpectedValueException) {
+                // Not a semver string
             }
-        } catch (\UnexpectedValueException) {
-            // Not a semver string, ignore
         }
+        // keep existing target
         return $target;
     }
 
-    private function merge(array $a, ?array $b): array
+    private function merge(array $source, array $target): array
     {
+        // Reference items already in target, nothing to do
+        if(array_intersect($source, $target) === $source) {
+            return $target;
+        }
+        // Merge and remove duplicates
         return array_values(
             array_unique(
-                array_merge($a, $b ?? [])
+                array_merge($source, $target)
             )
         );
     }
 
-    public function transform(mixed $reference, mixed $target): mixed
+    public function transform(mixed $source, mixed $target): mixed
     {
         // Target does not exist
-        if (!isset($target)) {
-            return $reference;
+        if (null === $target) {
+            return $source;
         }
         // Reference is a string (potentially semver)
-        if (is_string($reference)) {
-            return $this->parse($reference, $target);
+        if (is_string($source)) {
+            return $this->parse($source, $target);
         }
         // Reference is a list/array
-        if (is_array($reference) && array_is_list($reference)) {
-            return $this->merge($reference, $target);
+        if (is_array($source) && array_is_list($source)) {
+            return $this->merge($source, $target);
         }
         // Reference is an associative array/object
-        if(is_array($reference) || is_object($reference)) {
-            foreach ($reference as $name => $value) {
+        if(is_array($source) || is_object($source)) {
+            foreach ($source as $name => $value) {
                 $target[$name] = $this->transform(
-                    $value, $target[$name]
+                    $value, $target[$name] ?? null
                 );
             }
         }
