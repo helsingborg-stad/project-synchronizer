@@ -92,7 +92,7 @@ class Module
                 // Write error to log, but continue processing other files
                 $log->write(
                     " - {$e->getMessage()}. " .
-                    "If the file is missing in source. If this is intentional, please remove the reference from the configuration."
+                    "If the file is missing in source, and this is intentional, please remove the reference from the configuration."
                 );
                 continue;
             }
