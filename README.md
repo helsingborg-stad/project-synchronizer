@@ -63,8 +63,11 @@ if it didnt exist already.
 ````
 
 ## Synchronizing with other repos
-By default, the repo and config are remotely fetched from this source repository.
-This behaviour can be changed to include your own config and other repos, local or remote.
+The file ps-config.json file is expected to exist in the root of your project by default.
+The remote/source location needs to be provided using the --source parameter otherwise it will
+fallback to this repo (https://raw.githubusercontent.com/helsingborg-stad/project-synchronizer/refs/heads/main).
+
+Locations can be either local or remote.
 
 Example:
 ````
