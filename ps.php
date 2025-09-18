@@ -13,11 +13,11 @@ $cmd = (object) array_merge([
     "source" => SOURCE_PATH,
     "config" => CONFIG_PATH,
     "target" => TARGET_PATH,
-    "overwrite" => true,
+    "force" => true,
 ], getopt("", [
     "source:",
     "config:",
-    "overwrite",
+    "force",
     "help",
 ]));
 
@@ -29,7 +29,7 @@ if (isset($cmd->help)) {
         Usage: php ps.php
             --config <file|url>            Configuration file or URL
             --source <folder|url>          Source repository path
-            --overwrite                    Overwrite existing files and property values
+            --force                        Overwrite existing files and property values
             --help                         Display this help message
         TEXT;
     exit(1);

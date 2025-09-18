@@ -16,7 +16,7 @@ class Module
         // Create services
         $log = new ConsoleLoggerService();
         $fs = new FileService();
-        $tf = new Transform(!$cmd->overwrite);
+        $tf = new Transform(!$cmd->force);
 
         $log->write(
             <<<TEXT
@@ -72,7 +72,7 @@ class Module
                     $fs->copy(
                         $sFile,
                         $tFile,
-                        !$cmd->overwrite
+                        !$cmd->force
                     );
                     $log->write(" - File copy successful.");
                 } catch (\Exception $e) {
