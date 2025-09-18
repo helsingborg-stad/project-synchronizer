@@ -14,10 +14,15 @@ Usage: php vendor/helsingborg-stad/project-synchronizer/ps.php
 ```
 
 ## Configuration
-The composition of the configuration is quite straight forward. 
-Simply list the repo relative path of the file to align and specify which items
-to synchronize. If the item list is empty, e.g "/myfile.txt": [], the complete file will 
-be transfered (see constraints of 'target files' below).
+The composition of the configuration is quite straight forward. By default the application 
+is looking for a ps-config.json file in the running path of the project but the path could be
+altered with the --config parameter.
+
+The source location can be set using the --source parameter.
+
+To configure which files to be synched, simply list the project relative path of the file 
+specify which items to synchronize. If the item list is empty, e.g "/myfile.txt": [], the complete file 
+will be transfered (see constraints of 'target files' below).
 
 The synchronization is non-destructive by default:
 - Additions will always be processed (e.g a dependency is missing in the target project).

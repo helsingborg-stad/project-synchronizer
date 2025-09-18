@@ -38,7 +38,7 @@ class Module
             $conf = new ConfigService($fs->loadJSON($cmd->config));
         } catch (\Exception) {
             // Fatal error, cannot continue
-            $log->write("Failed to read configuration file.");
+            $log->write("Failed to read configuration file. Make sure that a ps-config.json file exists at the target path, or that a valid URL is provided.");
             exit(1);
         }
 

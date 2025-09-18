@@ -1,4 +1,0 @@
-{
-    "/composer.json": ["require", "require-dev", "scripts"],
-    "/GitVersion.yml": []
-}

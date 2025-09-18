@@ -2,8 +2,8 @@
 // The default path of the source repository having the master files
 // This will not likely ever change, but if it does, you can update it here
 define('SOURCE_PATH', 'https://raw.githubusercontent.com/helsingborg-stad/project-synchronizer/refs/heads/main');
-define('CONFIG_PATH', SOURCE_PATH . '/ps.json');
 define('TARGET_PATH', getcwd());
+define('CONFIG_PATH', TARGET_PATH . '/ps-config.json');
 
 // Autoload dependencies and classes
 require TARGET_PATH . '/vendor/autoload.php';
