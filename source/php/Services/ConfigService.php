@@ -24,8 +24,11 @@ class ConfigService implements ConfigServiceInterface
                 unset($content[$key]);
             } else {
                 // Ensure leading slash
-                $content['/' . ltrim($key, '/')] = $value;
-                unset($content[$key]);
+                $nKey = '/' . ltrim($key, '/');
+                if ($nKey !== $key) {
+                    $content[$nKey] = $value;
+                    unset($content[$key]);
+                }
             }
         }
         return $content;
