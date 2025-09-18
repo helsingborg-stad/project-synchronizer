@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Services\Tests;
 
 use App\Services\ConfigService;
-use App\Services\NullLoggerService;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -16,11 +15,13 @@ class ConfigServiceTest extends TestCase
     {
         $this->config = new ConfigService(
             [
+                // Not an array
                 "invalid_value" => null,
+                // Not a leading slash
                 "invalid_path" => [],
-                "invalid_object" => ["key" => "value"],
-            ],
-            new NullLoggerService()
+                // Not a list
+                "invalid_list" => ["key" => "value"]
+            ]
         );
     }
 
