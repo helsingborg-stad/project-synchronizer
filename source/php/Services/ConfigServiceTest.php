@@ -16,7 +16,9 @@ class ConfigServiceTest extends TestCase
     {
         $this->config = new ConfigService(
             [
-                "null" => null
+                "invalid_value" => null,
+                "invalid_path" => [],
+                "invalid_object" => ["key" => "value"],
             ],
             new NullLoggerService()
         );
@@ -32,8 +34,7 @@ class ConfigServiceTest extends TestCase
     public function testConfigIsLoaded()
     {
         $this->assertEquals(
-            [], $this->config->getFiles()
+            ["/invalid_path" => []], $this->config->getFiles()
         );
     }
-
 }

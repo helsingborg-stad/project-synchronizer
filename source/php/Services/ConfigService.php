@@ -20,7 +20,11 @@ class ConfigService implements ConfigServiceInterface
     {
         foreach ($content as $key => $value) {
             // Remove invalid entries
-            if(!is_string($key) || !is_array($value)) {
+            if(!is_string($key) || !is_array($value) || !array_is_list($value)) {
+                unset($content[$key]);
+            } else {
+                // Ensure leading slash
+                $content['/' . ltrim($key, '/')] = $value;
                 unset($content[$key]);
             }
         }

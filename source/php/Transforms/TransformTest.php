@@ -213,7 +213,7 @@ class TransformTest extends TestCase
         );
     }
 
-    #[TestDox('Merge arrays where target is missing')]
+    #[TestDox('merge arrays where target is missing')]
     public function testArrayWithMissingTarget()
     {
         $result = $this->transform->transform(

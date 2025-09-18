@@ -73,15 +73,15 @@ class Transform implements TransformInterface
         if (null === $target) {
             return $source;
         }
-        // Reference is a string (potentially semver)
+        // Source is a string (potentially semver)
         if (is_string($source)) {
             return $this->parse($source, $target);
         }
-        // Reference is a list/array
+        // Source is a list/array
         if (is_array($source) && array_is_list($source)) {
             return $this->merge($source, $target);
         }
-        // Reference is an associative array/object
+        // Source is an associative array/object
         if(is_array($source) || is_object($source)) {
             foreach ($source as $name => $value) {
                 $target[$name] = $this->transform(
