@@ -22,7 +22,13 @@
         "composer/semver": "^3.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.5"
+        "phpunit/phpunit": "^12",
+        "carthage-software/mago": "^0.26.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "carthage-software/mago": true
+        }
     },
     "version": "0.1.16"
 }

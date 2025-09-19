@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-         bootstrap="bootstrap.php"
+         bootstrap="vendor/autoload.php"
          backupGlobals="false"
          colors="true"
          convertErrorsToExceptions="true"
@@ -11,11 +11,9 @@
   <coverage processUncoveredFiles="true">
     <include>
       <directory suffix=".php">./source</directory>
-      <directory suffix=".php">./generator</directory>
     </include>
     <exclude>
       <directory suffix="Test.php">./source</directory>
-      <directory suffix="Test.php">./generator</directory>
     </exclude>
     <report>
       <text outputFile="php://stdout" showUncoveredFiles="true"/>

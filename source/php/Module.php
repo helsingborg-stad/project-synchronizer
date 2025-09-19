@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 declare(strict_types=1);
 
 namespace App;
@@ -18,35 +19,35 @@ class Module
         $fs = new FileService();
         $tf = new Transform(!$cmd->force);
 
-        $log->write(
-            <<<TEXT
-            ============================
-            <=> Project Synchronizer <=>
-            ============================
+        $log->write(<<<TEXT
+        ============================
+        <=> Project Synchronizer <=>
+        ============================
 
-            Configuration: 
-            {$cmd->config}
-            
-            Source folder/URL: 
-            {$cmd->source}
+        Configuration:
+        {$cmd->config}
 
-            TEXT
-        );
+        Source folder/URL:
+        {$cmd->source}
+
+        TEXT);
 
         try {
             // Try load config
             $conf = new ConfigService($fs->loadJSON($cmd->config));
         } catch (\Exception) {
             // Fatal error, cannot continue
-            $log->write("Failed to read configuration file. Make sure that a ps-config.json file exists at the target path, or that a valid URL is provided.");
+            $log->write(
+                'Failed to read configuration file. Make sure that a ps-config.json file exists at the target path, or that a valid URL is provided.',
+            );
             exit(1);
         }
 
-        /** 
+        /**
          * Process files
-         * In the below example, the files processed are 
+         * In the below example, the files processed are
          * /package.json and /composer.json
-         * 
+         *
          * Example config:
          *   {
          *       "/package.json": [...],
@@ -54,7 +55,7 @@ class Module
          *       "....": [...]
          *   }
          */
-        foreach ($conf->getFiles() as $file => $properties){
+        foreach ($conf->getFiles() as $file => $properties) {
             // Track progress
             $log->write("Processing {$file}");
 
@@ -63,18 +64,14 @@ class Module
             $sFile = $cmd->source . $file;
 
             // An empty property list means an intent to copy the whole file from source to target
-            // The file is only copied if it does not exist at target already (unless overwrite flag is set). 
-            // Since no transform will take place, this will allow any textbased 
+            // The file is only copied if it does not exist at target already (unless overwrite flag is set).
+            // Since no transform will take place, this will allow any textbased
             // filetype to be copied from source to target even if it is not JSON
-            if(empty($properties)) {
+            if (empty($properties)) {
                 try {
                     // Perform copy
-                    $fs->copy(
-                        $sFile,
-                        $tFile,
-                        !$cmd->force
-                    );
-                    $log->write(" - File copy successful.");
+                    $fs->copy($sFile, $tFile, !$cmd->force);
+                    $log->write(' - File copy successful.');
                 } catch (\Exception $e) {
                     // Write error to log, but continue processing other files
                     $log->write(" - {$e->getMessage()}");
@@ -92,7 +89,7 @@ class Module
                 // Write error to log, but continue processing other files
                 $log->write(
                     " - {$e->getMessage()}. " .
-                    "If the file is missing in source, and this is intentional, please remove the reference from the configuration."
+                        'If the file is missing in source, and this is intentional, please remove the reference from the configuration.',
                 );
                 continue;
             }
@@ -102,19 +99,16 @@ class Module
                 $target = $fs->loadJSON($tFile);
             } catch (\Exception $e) {
                 // Write error to log, but continue processing
-                $log->write(
-                    " - {$e->getMessage()}. " .
-                    "A new file will be created at target."
-                );
+                $log->write(" - {$e->getMessage()}. " . 'A new file will be created at target.');
                 $target = [];
             }
-            
+
             /**
              * Example properties
              * {
              *      "/...": [
-             *          "require", 
-             *          "require-dev", 
+             *          "require",
+             *          "require-dev",
              *          "scripts"
              *      ]
              * }
@@ -123,8 +117,8 @@ class Module
                 // Configured key does not exist in source file
                 if (!isset($source[$key])) {
                     $log->write(
-                        " - Key {$key} does not exist in source file. " . 
-                        "If this is intentional, please remove the reference from the configuration."
+                        " - Key {$key} does not exist in source file. " .
+                            'If this is intentional, please remove the reference from the configuration.',
                     );
                     continue;
                 }

@@ -1,29 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Transforms;
 
 use App\Contracts\TransformInterface;
-use Composer\Semver\VersionParser;
 use Composer\Semver\Constraint\Bound;
+use Composer\Semver\VersionParser;
 
 class Transform implements TransformInterface
 {
-    public function __construct(private bool $overwrite = false) {}
+    public function __construct(
+        private bool $overwrite = false,
+    ) {}
 
     private function getLowerBound(string $version): Bound
     {
-        return (new VersionParser())
-            ->parseConstraints($version)
-            ->getLowerBound();
+        $parser = new VersionParser();
+        // Extract version (throws UnexpectedValueException if not a valid version
+        return $parser->parseConstraints($version)->getLowerBound();
     }
 
-    private function parse(string $source, string $target): mixed {
-            if ($this->overwrite) {
-                return $source;
-            }
-            return $this->doParse($source, $target);
+    private function parse(string $source, string $target): mixed
+    {
+        if ($this->overwrite) {
+            return $source;
         }
+        return $this->doParse($source, $target);
+    }
 
     private function doParse(string $source, string $target): mixed
     {
@@ -56,15 +60,11 @@ class Transform implements TransformInterface
     private function doMerge(array $source, array $target): array
     {
         // Reference items already in target, nothing to do
-        if(array_intersect($source, $target) === $source) {
+        if (array_intersect($source, $target) === $source) {
             return $target;
         }
         // Merge and remove duplicates
-        return array_values(
-            array_unique(
-                array_merge($source, $target)
-            )
-        );
+        return array_values(array_unique(array_merge($source, $target)));
     }
 
     public function transform(mixed $source, mixed $target): mixed
@@ -82,11 +82,9 @@ class Transform implements TransformInterface
             return $this->merge($source, $target);
         }
         // Source is an associative array/object
-        if(is_array($source) || is_object($source)) {
+        if (is_array($source) || is_object($source)) {
             foreach ($source as $name => $value) {
-                $target[$name] = $this->transform(
-                    $value, $target[$name] ?? null
-                );
+                $target[$name] = $this->transform($value, $target[$name] ?? null);
             }
         }
         return $target;

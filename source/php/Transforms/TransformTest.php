@@ -1,10 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services\Tests;
 
 use App\Transforms\Transform;
-use App\Services\NullLoggerService;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -28,39 +28,43 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             [
-            // Reference
-            "libraryA" => "1.0.0",
-            ], [
-            // Target
-            "libraryB" => "2.0.0",
-            ]
+                // Reference
+                'libraryA' => '1.0.0',
+            ],
+            [
+                // Target
+                'libraryB' => '2.0.0',
+            ],
         );
         $this->assertEquals(
             [
-            // Target after transform
-            "libraryB" => "2.0.0",
-            "libraryA" => "1.0.0",
-            ], $result
+                // Target after transform
+                'libraryB' => '2.0.0',
+                'libraryA' => '1.0.0',
+            ],
+            $result,
         );
     }
-    
+
     #[TestDox('add nested name value pairs')]
     public function testAddNestedNameValuePairs()
     {
         $result = $this->transform->transform(
             [
-            // Reference
-            "libraryA" => [ "propertyA" => "ValueA"],
-            ], [
-            // Target
-            "libraryA" => [ "propertyB" => "ValueB"],
-            ]
+                // Reference
+                'libraryA' => ['propertyA' => 'ValueA'],
+            ],
+            [
+                // Target
+                'libraryA' => ['propertyB' => 'ValueB'],
+            ],
         );
         $this->assertEquals(
             [
-            // Target after transform
-            "libraryA" => [ "propertyB" => "ValueB", "propertyA" => "ValueA"]
-            ], $result
+                // Target after transform
+                'libraryA' => ['propertyB' => 'ValueB', 'propertyA' => 'ValueA'],
+            ],
+            $result,
         );
     }
 
@@ -69,18 +73,20 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             [
-            // Reference
-            "libraryA" => [ "propertyA" => "~2.0"],
-            ], [
-            // Target
-            "libraryA" => [ "propertyA" => "~1.0"],
-            ]
+                // Reference
+                'libraryA' => ['propertyA' => '~2.0'],
+            ],
+            [
+                // Target
+                'libraryA' => ['propertyA' => '~1.0'],
+            ],
         );
         $this->assertEquals(
             [
-            // Target after transform
-            "libraryA" => [ "propertyA" => "~2.0"]
-            ], $result
+                // Target after transform
+                'libraryA' => ['propertyA' => '~2.0'],
+            ],
+            $result,
         );
     }
 
@@ -89,18 +95,20 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             [
-            // Reference
-            "libraryA" => "^2.0.1",
-            ], [
-            // Target
-            "libraryA" => "1.0.0"
-            ]
+                // Reference
+                'libraryA' => '^2.0.1',
+            ],
+            [
+                // Target
+                'libraryA' => '1.0.0',
+            ],
         );
         $this->assertEquals(
             [
-            // Target after transform
-            "libraryA" => "^2.0.1"
-            ], $result
+                // Target after transform
+                'libraryA' => '^2.0.1',
+            ],
+            $result,
         );
     }
 
@@ -109,18 +117,20 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             [
-            // Reference
-            "libraryA" => "1.0.0"
-            ], [
-            // Target
-            "libraryA" => "2.0.0"
-            ]
+                // Reference
+                'libraryA' => '1.0.0',
+            ],
+            [
+                // Target
+                'libraryA' => '2.0.0',
+            ],
         );
         $this->assertEquals(
             [
-            // Target after transform
-            "libraryA" => "2.0.0",
-            ], $result
+                // Target after transform
+                'libraryA' => '2.0.0',
+            ],
+            $result,
         );
     }
 
@@ -129,39 +139,42 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             [
-            // Reference
-            "NameA" => "ValueA_New",
-            "NameB" => false,
-            "NameC" => 2.0
-            ], [
-            // Target
-            "NameA" => "ValueA",
-            "NameB" => true,
-            "NameC" => 1.0
-            ]
+                // Reference
+                'NameA' => 'ValueA_New',
+                'NameB' => false,
+                'NameC' => 2.0,
+            ],
+            [
+                // Target
+                'NameA' => 'ValueA',
+                'NameB' => true,
+                'NameC' => 1.0,
+            ],
         );
         $this->assertEquals(
             [
-            // Target after transform
-            "NameA" => "ValueA",
-            "NameB" => true,
-            "NameC" => 1.0
-            ], $result
+                // Target after transform
+                'NameA' => 'ValueA',
+                'NameB' => true,
+                'NameC' => 1.0,
+            ],
+            $result,
         );
     }
+
     #[TestDox('retain single string value')]
     public function testRetainExistingStringValue()
     {
         $result = $this->transform->transform(
             // Reference
-            "ValueA",
+            'ValueA',
             // Target
-            "ValueB"
+            'ValueB',
         );
         $this->assertEquals(
             // Target after transform
-            "ValueB",
-            $result
+            'ValueB',
+            $result,
         );
     }
 
@@ -170,14 +183,14 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             // Reference
-            "ValueA",
+            'ValueA',
             // Target
-            null
+            null,
         );
         $this->assertEquals(
             // Target after transform
-            "ValueA",
-            $result
+            'ValueA',
+            $result,
         );
     }
 
@@ -186,14 +199,14 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             // Reference
-            "2.0.0",
+            '2.0.0',
             // Target
-            "1.0.0"
+            '1.0.0',
         );
         $this->assertEquals(
             // Target after transform
-            "2.0.0",
-            $result
+            '2.0.0',
+            $result,
         );
     }
 
@@ -202,14 +215,14 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             // Reference
-            ["ValueA", "ValueB"],
+            ['ValueA', 'ValueB'],
             // Target
-            ["ValueA", "ValueC", "ValueD"]
+            ['ValueA', 'ValueC', 'ValueD'],
         );
         $this->assertEquals(
             // Target after transform
-            ["ValueA", "ValueB", "ValueC", "ValueD"],
-            $result
+            ['ValueA', 'ValueB', 'ValueC', 'ValueD'],
+            $result,
         );
     }
 
@@ -218,29 +231,30 @@ class TransformTest extends TestCase
     {
         $result = $this->transform->transform(
             // Reference
-            ["ValueA", "ValueB"],
+            ['ValueA', 'ValueB'],
             // Target
-            null
-        );  
+            null,
+        );
         $this->assertEquals(
             // Target after transform
-            ["ValueA", "ValueB"],
-            $result
+            ['ValueA', 'ValueB'],
+            $result,
         );
     }
+
     #[TestDox('apply object where target is missing')]
     public function testObjectWithMissingTarget()
     {
         $result = $this->transform->transform(
             // Reference
-            ["ValueA" => "ValueB"],
+            ['ValueA' => 'ValueB'],
             // Target
-            null
-        );  
+            null,
+        );
         $this->assertEquals(
             // Target after transform
-            ["ValueA" => "ValueB"],
-            $result
+            ['ValueA' => 'ValueB'],
+            $result,
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services;
@@ -34,10 +35,11 @@ class FileService implements FileServiceInterface
             throw new \Exception("Failed to write to file: $path");
         }
     }
+
     public function loadJSON(string $path): array
     {
         $json = json_decode($this->loadText($path), true);
-        if($json === null) {
+        if ($json === null) {
             throw new \Exception("Failed to decode JSON from file: $path");
         }
         return $json;
@@ -65,4 +67,3 @@ class FileService implements FileServiceInterface
         $this->saveText($destination, $this->loadText($source));
     }
 }
-

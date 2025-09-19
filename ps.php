@@ -1,4 +1,5 @@
 <?php
+
 // The default path of the source repository having the master files
 // This will not likely ever change, but if it does, you can update it here
 define('SOURCE_PATH', 'https://raw.githubusercontent.com/helsingborg-stad/project-synchronizer/refs/heads/main');
@@ -9,19 +10,23 @@ define('CONFIG_PATH', TARGET_PATH . '/ps-config.json');
 require TARGET_PATH . '/vendor/autoload.php';
 
 // Parse command line arguments with defaults
-$cmd = (object) array_merge([
-    "source" => SOURCE_PATH,
-    "config" => CONFIG_PATH,
-    "target" => TARGET_PATH,
-    "force" => true,
-], getopt("", [
-    "source:",
-    "config:",
-    "force",
-    "help",
-]));
+$cmd = (object) array_merge(
+    [
+        'source' => SOURCE_PATH,
+        'config' => CONFIG_PATH,
+        'target' => TARGET_PATH,
+        'force' => true,
+    ],
+    getopt('', [
+        'source:',
+        'config:',
+        'force',
+        'help',
+    ]),
+);
 
-$cmd->source = rtrim($cmd->source, "/");
+// Remove trailing slash from source path if present
+$cmd->source = rtrim($cmd->source, '/');
 
 // Display help if requested
 if (isset($cmd->help)) {
@@ -35,5 +40,5 @@ if (isset($cmd->help)) {
     exit(1);
 }
 
-# Run the module
+// Run the module
 App\Module::exec($cmd);

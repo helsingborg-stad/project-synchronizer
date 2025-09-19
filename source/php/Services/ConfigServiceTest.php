@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services\Tests;
@@ -13,16 +14,14 @@ class ConfigServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = new ConfigService(
-            [
-                // Not an array
-                "invalid_value" => null,
-                // Not a leading slash
-                "invalid_path" => [],
-                // Not a list
-                "invalid_list" => ["key" => "value"]
-            ]
-        );
+        $this->config = new ConfigService([
+            // Not an array
+            'invalid_value' => null,
+            // Not a leading slash
+            'invalid_path' => [],
+            // Not a list
+            'invalid_list' => ['key' => 'value'],
+        ]);
     }
 
     #[TestDox('class can be instantiated')]
@@ -34,8 +33,6 @@ class ConfigServiceTest extends TestCase
     #[TestDox('Config is normalized when loaded')]
     public function testConfigIsLoaded()
     {
-        $this->assertEquals(
-            ["/invalid_path" => []], $this->config->getFiles()
-        );
+        $this->assertEquals(['/invalid_path' => []], $this->config->getFiles());
     }
 }
