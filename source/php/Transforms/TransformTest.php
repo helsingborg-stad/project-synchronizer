@@ -97,16 +97,19 @@ class TransformTest extends TestCase
             [
                 // Reference
                 'libraryA' => '^2.0.1',
+                'libraryB' => '^0.26.1',
             ],
             [
                 // Target
                 'libraryA' => '1.0.0',
+                'libraryB' => '^0.2',
             ],
         );
         $this->assertEquals(
             [
                 // Target after transform
                 'libraryA' => '^2.0.1',
+                'libraryB' => '^0.26.1',
             ],
             $result,
         );

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Transforms;
 
-use App\Contracts\ConfigServiceInterface;
 use App\Contracts\TransformInterface;
+use Composer\Semver\Comparator;
 use Composer\Semver\Constraint\Bound;
 use Composer\Semver\VersionParser;
 
@@ -32,7 +32,7 @@ class Transform implements TransformInterface
                 $v1 = $this->getLowerBound($source);
                 $v2 = $this->getLowerBound($target);
 
-                if ($v1 > $v2) {
+                if (Comparator::greaterThan($v1, $v2)) {
                     return $source;
                 }
             } catch (\UnexpectedValueException) {

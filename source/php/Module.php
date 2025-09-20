@@ -7,12 +7,18 @@ namespace App;
 
 use App\Contracts\ConfigServiceInterface;
 
-const phrases = [
+define(
+    'ERR_CONFIG_MISSING',
     'Failed to read configuration file. Make sure that a ps-config.json file exists at the target path, or that a valid URL is provided.',
+);
+define(
+    'ERR_SOURCE_MISSING',
     'If the file is missing in source, and this is intentional, please remove the reference from the configuration.',
-    'A new file will be created at target.',
-    'If this is intentional, please remove the reference from the configuration.',
-];
+);
+define(
+    'ERR_KEY_MISSING',
+    ' - Key %s does not exist in source file. If this is intentional, please remove the reference from the configuration.',
+);
 
 class Module
 {
@@ -30,7 +36,7 @@ class Module
         try {
             $config->loadFiles($file);
         } catch (\Exception) {
-            $console->write(phrases[0]);
+            $console->write(ERR_CONFIG_MISSING);
             exit(1);
         }
 
@@ -53,20 +59,20 @@ class Module
             try {
                 $sourceContent = $file->loadJSON($sourceFile);
             } catch (\Exception $e) {
-                $console->write(" - {$e->getMessage()}. {phrases[1]}");
+                $console->write(" - {$e->getMessage()}." . ERR_SOURCE_MISSING);
                 continue;
             }
 
             try {
                 $targetContent = $file->loadJSON($targetFile);
             } catch (\Exception $e) {
-                $console->write(" - {$e->getMessage()}. {phrases[2]}");
+                $console->write(" - {$e->getMessage()}");
                 continue;
             }
 
             foreach ($properties as $key) {
                 if (!isset($sourceContent[$key])) {
-                    $console->write(" - Key {$key} does not exist in source file. {phrases[3]}");
+                    $console->write(sprintf(ERR_KEY_MISSING, $key));
                     continue;
                 }
                 $console->write(" - Transforming {$key}");
