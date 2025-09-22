@@ -36,7 +36,7 @@ if (isset($cmd->help)) {
     exit(1);
 }
 
-App\Module::exec([
+App\Module::main([
     'console' => new ConsoleService(),
     'file' => new FileService(),
     'transform' => new Transform(),

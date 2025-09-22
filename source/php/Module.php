@@ -22,7 +22,7 @@ define(
 
 class Module
 {
-    public static function exec(array $services)
+    public static function main(array $services)
     {
         [
             'console' => $console,
