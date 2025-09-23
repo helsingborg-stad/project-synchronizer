@@ -7,7 +7,7 @@ Install using composer:
 
 ## Usage
 ```
-Usage: php $(composer config -g home)/vendor/helsingborg-stad/project-synchronizer/ps.php
+Usage: $(composer config -g home)/vendor/helsingborg-stad/project-synchronizer/ps
 
 	--config <file|url>            	Configuration file or URL
 	--source <folder|url>          	Source repository path
