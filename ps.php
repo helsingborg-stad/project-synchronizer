@@ -9,7 +9,11 @@ define('SOURCE_PATH', 'https://raw.githubusercontent.com/helsingborg-stad/projec
 define('TARGET_PATH', getcwd());
 define('CONFIG_PATH', TARGET_PATH . '/ps-config.json');
 
-require TARGET_PATH . '/vendor/autoload.php';
+if (file_exists(__DIR__ . '/../../autoload.php')) {
+    require_once __DIR__ . '/../../autoload.php';
+} else {
+    require_once TARGET_PATH . '/vendor/autoload.php';
+}
 
 $cmd = (object) array_merge(
     [

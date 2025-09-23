@@ -3,11 +3,11 @@ Adds and upgrades dependencies and files from a master repository.
 
 ## Installation
 Install using composer:
-```composer require helsingborg-stad/project-synchronizer --dev```
+```composer global require helsingborg-stad/project-synchronizer```
 
 ## Usage
 ```
-Usage: php vendor/helsingborg-stad/project-synchronizer/ps.php
+Usage: php $(composer config -g home)/vendor/helsingborg-stad/project-synchronizer/ps.php
 
 	--config <file|url>            	Configuration file or URL
 	--source <folder|url>          	Source repository path
