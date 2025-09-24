@@ -75,10 +75,10 @@ class ConfigService implements ConfigServiceInterface
     {
         $config = $fs->loadJSON($this->config);
 
-        if (isset($config['source']) && isEmpty($this->source)) {
+        if (isset($config['source']) && empty($this->source)) {
             $this->setSourcePath($config['source']);
         }
-        if (isset($config['target']) && isEmpty($this->target)) {
+        if (isset($config['target']) && empty($this->target)) {
             $this->setTargetPath($config['target']);
         }
         if (isset($config['force'])) {
