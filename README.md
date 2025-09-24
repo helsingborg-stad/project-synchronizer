@@ -19,7 +19,7 @@ Usage: $(composer config -g home)/vendor/helsingborg-stad/project-synchronizer/p
 ## Configuration
 A project specific configuration file is used to define which file and optionally which properties of a file that should be synchronized. The composition of the configuration is quite straight forward.
 
-Commandline options (except for the --config parameter) can be stored in the configurationfile. If the corresponding options are provided on the commandline, they will take prescedence. 
+Commandline options (except for the --config parameter) can be stored in the configurationfile. If the corresponding options are provided in the configuration, they will take prescedence over the commandline options. 
 
 ```
 {
