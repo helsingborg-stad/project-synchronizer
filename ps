@@ -26,6 +26,7 @@ $cmd = (object) array_merge(
     getopt('', [
         'source:',
         'config:',
+        'target:',
         'force',
         'help',
     ]),
@@ -33,9 +34,10 @@ $cmd = (object) array_merge(
 
 if (isset($cmd->help)) {
     echo <<<TEXT
-        Usage: php ps.php
+        Usage: ps <options>
             --config <file|url>            Configuration file or URL
             --source <folder|url>          Source repository path
+            --target <folder>              Target repository path
             --force                        Overwrite existing files and property values
             --help                         Display this help message
         TEXT;

@@ -19,15 +19,20 @@ class ConfigServiceTest extends TestCase
         $fs = $this->createMock(\App\Contracts\FileServiceInterface::class);
 
         $fs->method('loadJSON')->willReturn([
-            // Not an array
-            'invalid_value' => null,
-            // Not a leading slash
-            'invalid_path' => [],
-            // Not a list
-            'invalid_list' => ['key' => 'value'],
+            'source' => 's1',
+            'target' => 't1',
+            'force' => true,
+            'files' => [
+                // Not an array
+                'invalid_value' => null,
+                // Not a leading slash
+                'invalid_path' => [],
+                // Not a list
+                'invalid_list' => ['key' => 'value'],
+            ],
         ]);
 
-        $this->config->loadFiles($fs);
+        $this->config->loadConfig($fs);
     }
 
     #[TestDox('class can be instantiated')]
@@ -36,9 +41,17 @@ class ConfigServiceTest extends TestCase
         $this->assertInstanceOf(ConfigService::class, $this->config);
     }
 
-    #[TestDox('Config is normalized when loaded')]
+    #[TestDox('config is normalized when loaded')]
     public function testConfigIsLoaded()
     {
         $this->assertEquals(['/invalid_path' => []], $this->config->getFiles());
+    }
+
+    #[TestDox('command line parameters read from config')]
+    public function testCmdparametersThroughConfig()
+    {
+        $this->assertEquals('s1', $this->config->getSourcePath());
+        $this->assertEquals('t1', $this->config->getTargetPath());
+        $this->assertEquals(true, $this->config->getForce());
     }
 }

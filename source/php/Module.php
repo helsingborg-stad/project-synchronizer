@@ -31,14 +31,13 @@ class Module
             'config' => $config,
         ] = $services;
 
-        $console->write(self::print($config));
-
         try {
-            $config->loadFiles($file);
+            $config->loadConfig($file);
         } catch (\Exception) {
             $console->write(ERR_CONFIG_MISSING);
             exit(1);
         }
+        $console->write(self::print($config));
 
         foreach ($config->getFiles() as $item => $properties) {
             $console->write("Processing {$item}");

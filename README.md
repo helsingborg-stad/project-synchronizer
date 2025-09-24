@@ -16,29 +16,43 @@ Usage: $(composer config -g home)/vendor/helsingborg-stad/project-synchronizer/p
 ```
 
 ## Configuration
-A project specific configuration file is used to define which file and optionally which properties of a file that should be synchronized. The composition of the configuration is quite straight forward. 
+A project specific configuration file is used to define which file and optionally which properties of a file that should be synchronized. The composition of the configuration is quite straight forward.
 
-````
+Commandline options (except for the --config parameter) can be stored in the configurationfile. If the corresponding commandline options is provided, they will take prescedence. 
+
+```
 {
-	"/package.json": [
-		"license",
-		"dependencies",
-		"devDependencies",
-		"scripts",
-		"engines",
-		"jest"
-	],
-	"/composer.json": ["require", "require-dev", "scripts"],
-	"/tsconfig.json": ["compilerOptions"],
-	"/.vscode/settings.json": [
-		"editor.formatOnSave",
-		"editor.defaultFormatter",
-		"editor.codeActionsOnSave"
-	],
-	"/.vscode/extensions.json": ["recommendations"],
-	"/vite.config.mjs": []
+	"source": "...",
+	"target": "...",
+	"force": true,
+	"files": { <see below> }
 }
-````
+```
+The files structure:
+```
+{
+	"files": {
+		"/package.json": [
+			"license",
+			"dependencies",
+			"devDependencies",
+			"scripts",
+			"engines",
+			"jest"
+		],
+		"/composer.json": ["require", "require-dev", "scripts"],
+		"/tsconfig.json": ["compilerOptions"],
+		"/.vscode/settings.json": [
+			"editor.formatOnSave",
+			"editor.defaultFormatter",
+			"editor.codeActionsOnSave"
+		],
+		"/.vscode/extensions.json": ["recommendations"],
+		"/vite.config.mjs": []
+	}
+}
+```
+
 Note that only json files can be transformed. Other file types will be be copied "as is".
 
 By default the application is looking for a ps-config.json file in the running path of the project 

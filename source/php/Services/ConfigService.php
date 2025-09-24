@@ -7,6 +7,8 @@ namespace App\Services;
 use App\Contracts\ConfigServiceInterface;
 use App\Contracts\FileServiceInterface;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ConfigService implements ConfigServiceInterface
 {
     private bool $force;
@@ -17,10 +19,10 @@ class ConfigService implements ConfigServiceInterface
 
     public function __construct(object $cmd)
     {
-        $this->force = isset($cmd->force);
-        $this->source = rtrim($cmd->source ?? '', '/');
-        $this->target = rtrim($cmd->target ?? '', '/');
-        $this->config = $cmd->config ?? '';
+        $this->setForce(isset($cmd->force));
+        $this->setSourcePath($cmd->source ?? '');
+        $this->setTargetPath($cmd->target ?? '');
+        $this->setConfigPath($cmd->config ?? '');
         $this->files = [];
     }
 
@@ -29,9 +31,19 @@ class ConfigService implements ConfigServiceInterface
         return $this->source;
     }
 
+    public function setSourcePath(string $path): void
+    {
+        $this->source = rtrim($path, '/');
+    }
+
     public function getTargetPath(): string
     {
         return $this->target;
+    }
+
+    public function setTargetPath(string $path): void
+    {
+        $this->target = rtrim($path, '/');
     }
 
     public function getConfigPath(): string
@@ -39,9 +51,19 @@ class ConfigService implements ConfigServiceInterface
         return $this->config;
     }
 
+    public function setConfigPath(string $path): void
+    {
+        $this->config = rtrim($path, '/');
+    }
+
     public function getForce(): bool
     {
         return $this->force;
+    }
+
+    public function setForce(bool $force): void
+    {
+        $this->force = $force;
     }
 
     public function getFiles(): array
@@ -49,10 +71,20 @@ class ConfigService implements ConfigServiceInterface
         return $this->files;
     }
 
-    public function loadFiles(FileServiceInterface $fs): void
+    public function loadConfig(FileServiceInterface $fs): void
     {
-        $files = $fs->loadJSON($this->config);
-        $this->files = $this->normalizeFiles($files);
+        $config = $fs->loadJSON($this->config);
+
+        if (isset($config['source']) && isEmpty($this->source)) {
+            $this->setSourcePath($config['source']);
+        }
+        if (isset($config['target']) && isEmpty($this->target)) {
+            $this->setTargetPath($config['target']);
+        }
+        if (isset($config['force'])) {
+            $this->force = (bool) $config['force'];
+        }
+        $this->files = $this->normalizeFiles($config['files'] ?? []);
     }
 
     private function normalizeFiles(array $content): array
