@@ -137,6 +137,29 @@ class TransformTest extends TestCase
         );
     }
 
+    #[TestDox('overwrite name value pairs if newer (semver)')]
+    public function testOverwriteNewerVersions()
+    {
+        $result = $this->transform->transform(
+            [
+                // Reference
+                'libraryA' => '1.0.0',
+            ],
+            [
+                // Target
+                'libraryA' => '2.0.0',
+            ],
+            true, // Force
+        );
+        $this->assertEquals(
+            [
+                // Target after transform
+                'libraryA' => '1.0.0',
+            ],
+            $result,
+        );
+    }
+
     #[TestDox('retain existing name value pairs')]
     public function testRetainNameValuePairs()
     {

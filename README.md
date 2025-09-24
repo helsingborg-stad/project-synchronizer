@@ -11,6 +11,7 @@ Usage: $(composer config -g home)/vendor/helsingborg-stad/project-synchronizer/p
 
 	--config <file|url>            	Configuration file or URL
 	--source <folder|url>          	Source repository path
+	--target <folder>				Target repository path
 	--force							Overwrite existing files and property values
 	--help                         	Display this help message
 ```
@@ -18,13 +19,13 @@ Usage: $(composer config -g home)/vendor/helsingborg-stad/project-synchronizer/p
 ## Configuration
 A project specific configuration file is used to define which file and optionally which properties of a file that should be synchronized. The composition of the configuration is quite straight forward.
 
-Commandline options (except for the --config parameter) can be stored in the configurationfile. If the corresponding commandline options is provided, they will take prescedence. 
+Commandline options (except for the --config parameter) can be stored in the configurationfile. If the corresponding options are provided on the commandline, they will take prescedence. 
 
 ```
 {
 	"source": "...",
 	"target": "...",
-	"force": true,
+	"force": true|false,
 	"files": { <see below> }
 }
 ```
@@ -58,7 +59,7 @@ Note that only json files can be transformed. Other file types will be be copied
 By default the application is looking for a ps-config.json file in the running path of the project 
 but the path could be altered with the --config parameter.
 
-Target is always the current directory.
+Default target is the current directory.
 
 The location of the source files should be set using the --source parameter, either https or filesystem. (It will default to this Github project).
 
