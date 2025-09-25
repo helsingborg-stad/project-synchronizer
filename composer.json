@@ -6,6 +6,9 @@
     "scripts": {
         "test": "phpunit --no-coverage --testdox"
     },
+    "bin": [
+        "ps"
+    ],
     "authors": [
         {
             "name": "Petter Andersson",
