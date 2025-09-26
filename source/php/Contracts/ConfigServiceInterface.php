@@ -8,6 +8,8 @@ interface ConfigServiceInterface
 {
     public function getFiles(): array;
 
+    public function setFiles(array $files): void;
+
     public function loadConfig(FileServiceInterface $fs): void;
 
     public function getSourcePath(): string;

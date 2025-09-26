@@ -7,8 +7,6 @@ namespace App\Services;
 use App\Contracts\ConfigServiceInterface;
 use App\Contracts\FileServiceInterface;
 
-use function PHPUnit\Framework\isEmpty;
-
 class ConfigService implements ConfigServiceInterface
 {
     private bool $force;
@@ -71,6 +69,11 @@ class ConfigService implements ConfigServiceInterface
         return $this->files;
     }
 
+    public function setFiles(array $files): void
+    {
+        $this->files = $this->normalizeFiles($files);
+    }
+
     public function loadConfig(FileServiceInterface $fs): void
     {
         $config = $fs->loadJSON($this->config);
@@ -84,7 +87,7 @@ class ConfigService implements ConfigServiceInterface
         if (isset($config['force'])) {
             $this->force = (bool) $config['force'];
         }
-        $this->files = $this->normalizeFiles($config['files'] ?? []);
+        $this->setFiles($config['files'] ?? []);
     }
 
     private function normalizeFiles(array $content): array
