@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Transforms;
 
+use App\Contracts\ConfigServiceInterface;
 use App\Contracts\TransformInterface;
 use Composer\Semver\Comparator;
 use Composer\Semver\Constraint\Bound;
@@ -57,20 +58,20 @@ class Transform implements TransformInterface
         return array_values(array_unique(array_merge($source, $target)));
     }
 
-    public function transform(mixed $source, mixed $target, bool $overwrite = false): mixed
+    public function transform(mixed $source, mixed $target, ConfigServiceInterface $config): mixed
     {
         if (null === $target) {
             return $source;
         }
         if (is_string($source)) {
-            return $this->parse($source, $target, $overwrite);
+            return $this->parse($source, $target, $config->getForce());
         }
         if (is_array($source) && array_is_list($source)) {
-            return $this->merge($source, $target, $overwrite);
+            return $this->merge($source, $target, $config->getForce());
         }
         if (is_array($source) || is_object($source)) {
             foreach ($source as $name => $value) {
-                $target[$name] = $this->transform($value, $target[$name] ?? null, $overwrite);
+                $target[$name] = $this->transform($value, $target[$name] ?? null, $config);
             }
         }
         return $target;

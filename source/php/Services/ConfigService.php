@@ -13,6 +13,7 @@ class ConfigService implements ConfigServiceInterface
     private string $source;
     private string $target;
     private string $config;
+    private bool $help;
     private array $files;
 
     public function __construct(object $cmd)
@@ -21,6 +22,7 @@ class ConfigService implements ConfigServiceInterface
         $this->setSourcePath($cmd->source ?? '');
         $this->setTargetPath($cmd->target ?? '');
         $this->setConfigPath($cmd->config ?? '');
+        $this->setHelp(isset($cmd->help));
         $this->files = [];
     }
 
@@ -74,20 +76,48 @@ class ConfigService implements ConfigServiceInterface
         $this->files = $this->normalizeFiles($files);
     }
 
-    public function loadConfig(FileServiceInterface $fs): void
+    public function setConfig(array $config): void
     {
-        $config = $fs->loadJSON($this->config);
-
-        if (isset($config['source'])) {
+        if (isset($config['source']) && is_string($config['source'])) {
             $this->setSourcePath($config['source']);
         }
-        if (isset($config['target'])) {
+        if (isset($config['target']) && is_string($config['target'])) {
             $this->setTargetPath($config['target']);
         }
-        if (isset($config['force'])) {
-            $this->force = (bool) $config['force'];
+        if (isset($config['force']) && is_bool($config['force'])) {
+            $this->setForce((bool) $config['force']);
         }
         $this->setFiles($config['files'] ?? []);
+    }
+
+    public function getConfig(): array
+    {
+        return [
+            'source' => $this->getSourcePath(),
+            'target' => $this->getTargetPath(),
+            'force' => $this->getForce(),
+            'files' => $this->getFiles(),
+        ];
+    }
+
+    public function setHelp(bool $help): void
+    {
+        $this->help = $help;
+    }
+
+    public function getHelp(): bool
+    {
+        return $this->help;
+    }
+
+    public function loadConfig(FileServiceInterface $fs): void
+    {
+        $this->setConfig($fs->loadJSON($this->config));
+    }
+
+    public function saveConfig(FileServiceInterface $fs): void
+    {
+        $fs->saveJSON($this->config, $this->getConfig(), $this->getForce());
     }
 
     private function normalizeFiles(array $content): array
@@ -104,5 +134,17 @@ class ConfigService implements ConfigServiceInterface
             }
         }
         return $content;
+    }
+
+    public function toString(): string
+    {
+        $force = $this->getForce() ? 'Yes' : 'No';
+
+        return <<<TEXT
+        - Configuration: {$this->getConfigPath()}
+        - Source folder: {$this->getSourcePath()}
+        - Target folder: {$this->getTargetPath()}
+        - Force overwrite: {$force}
+        TEXT;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Tests;
 
+use App\Services\ConfigService;
 use App\Transforms\Transform;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -11,10 +12,12 @@ use PHPUnit\Framework\TestCase;
 class TransformTest extends TestCase
 {
     private $transform = null;
+    private ConfigService $config;
 
     protected function setUp(): void
     {
         $this->transform = new Transform();
+        $this->config = new ConfigService((object) []);
     }
 
     #[TestDox('class can be instantiated')]
@@ -35,6 +38,7 @@ class TransformTest extends TestCase
                 // Target
                 'libraryB' => '2.0.0',
             ],
+            $this->config,
         );
         $this->assertEquals(
             [
@@ -58,6 +62,7 @@ class TransformTest extends TestCase
                 // Target
                 'libraryA' => ['propertyB' => 'ValueB'],
             ],
+            $this->config,
         );
         $this->assertEquals(
             [
@@ -80,6 +85,7 @@ class TransformTest extends TestCase
                 // Target
                 'libraryA' => ['propertyA' => '~1.0'],
             ],
+            $this->config,
         );
         $this->assertEquals(
             [
@@ -104,6 +110,7 @@ class TransformTest extends TestCase
                 'libraryA' => '1.0.0',
                 'libraryB' => '^0.2',
             ],
+            $this->config,
         );
         $this->assertEquals(
             [
@@ -127,6 +134,7 @@ class TransformTest extends TestCase
                 // Target
                 'libraryA' => '2.0.0',
             ],
+            $this->config,
         );
         $this->assertEquals(
             [
@@ -140,6 +148,8 @@ class TransformTest extends TestCase
     #[TestDox('overwrite name value pairs if newer (semver)')]
     public function testOverwriteNewerVersions()
     {
+        $this->config->setForce(true);
+
         $result = $this->transform->transform(
             [
                 // Reference
@@ -149,8 +159,10 @@ class TransformTest extends TestCase
                 // Target
                 'libraryA' => '2.0.0',
             ],
-            true, // Force
+            $this->config,
         );
+        $this->config->setForce(false);
+
         $this->assertEquals(
             [
                 // Target after transform
@@ -176,6 +188,7 @@ class TransformTest extends TestCase
                 'NameB' => true,
                 'NameC' => 1.0,
             ],
+            $this->config,
         );
         $this->assertEquals(
             [
@@ -196,6 +209,7 @@ class TransformTest extends TestCase
             'ValueA',
             // Target
             'ValueB',
+            $this->config,
         );
         $this->assertEquals(
             // Target after transform
@@ -212,6 +226,7 @@ class TransformTest extends TestCase
             'ValueA',
             // Target
             null,
+            $this->config,
         );
         $this->assertEquals(
             // Target after transform
@@ -228,6 +243,7 @@ class TransformTest extends TestCase
             '2.0.0',
             // Target
             '1.0.0',
+            $this->config,
         );
         $this->assertEquals(
             // Target after transform
@@ -244,6 +260,7 @@ class TransformTest extends TestCase
             ['ValueA', 'ValueB'],
             // Target
             ['ValueA', 'ValueC', 'ValueD'],
+            $this->config,
         );
         $this->assertEquals(
             // Target after transform
@@ -260,6 +277,7 @@ class TransformTest extends TestCase
             ['ValueA', 'ValueB'],
             // Target
             null,
+            $this->config,
         );
         $this->assertEquals(
             // Target after transform
@@ -276,6 +294,7 @@ class TransformTest extends TestCase
             ['ValueA' => 'ValueB'],
             // Target
             null,
+            $this->config,
         );
         $this->assertEquals(
             // Target after transform

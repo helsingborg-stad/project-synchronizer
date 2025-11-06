@@ -10,11 +10,11 @@ interface FileServiceInterface
 
     public function loadText(string $path): string;
 
-    public function saveText(string $path, string $content): void;
+    public function saveText(string $path, string $content, bool $overwrite): void;
 
     public function loadJSON(string $path): array;
 
-    public function saveJSON(string $path, array $json): void;
+    public function saveJSON(string $path, array $json, bool $overwrite): void;
 
     public function exists(string $path): bool;
 

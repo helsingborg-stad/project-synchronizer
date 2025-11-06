@@ -34,13 +34,13 @@ class Module
         try {
             $config->loadConfig($file);
         } catch (\Exception) {
-            $console->write(ERR_CONFIG_MISSING);
+            $console->writeLn(ERR_CONFIG_MISSING);
             exit(1);
         }
-        $console->write(self::print($config));
+        $console->writeLn(self::print($config));
 
         foreach ($config->getFiles() as $item => $properties) {
-            $console->write("Processing {$item}");
+            $console->writeLn("Processing {$item}");
 
             $targetFile = $config->getTargetPath() . $item;
             $sourceFile = $config->getSourcePath() . $item;
@@ -48,9 +48,9 @@ class Module
             if (empty($properties) || !$file->exists($targetFile)) {
                 try {
                     $file->copy($sourceFile, $targetFile, $config->getForce());
-                    $console->write(' - File copy successful.');
+                    $console->writeLn(' - File copy successful.');
                 } catch (\Exception $e) {
-                    $console->write(" - {$e->getMessage()}");
+                    $console->writeLn(" - {$e->getMessage()}");
                 }
                 continue;
             }
@@ -58,28 +58,28 @@ class Module
             try {
                 $sourceContent = $file->loadJSON($sourceFile);
             } catch (\Exception $e) {
-                $console->write(" - {$e->getMessage()}." . ERR_SOURCE_MISSING);
+                $console->writeLn(" - {$e->getMessage()}." . ERR_SOURCE_MISSING);
                 continue;
             }
 
             try {
                 $targetContent = $file->loadJSON($targetFile);
             } catch (\Exception $e) {
-                $console->write(" - {$e->getMessage()}");
+                $console->writeLn(" - {$e->getMessage()}");
                 continue;
             }
 
             foreach ($properties as $key) {
                 if (!isset($sourceContent[$key])) {
-                    $console->write(sprintf(ERR_KEY_MISSING, $key));
+                    $console->writeLn(ERR_KEY_MISSING, $key);
                     continue;
                 }
-                $console->write(" - Transforming {$key}");
+                $console->writeLn(" - Transforming {$key}");
 
                 $targetContent[$key] = $transform->transform(
                     $sourceContent[$key],
                     $targetContent[$key] ?? null,
-                    $config->getForce(),
+                    $config,
                 );
             }
             $file->saveJSON($targetFile, $targetContent);
@@ -94,14 +94,7 @@ class Module
         <=> Project Synchronizer <=>
         ============================
 
-        Configuration:
-        {$config->getConfigPath()}
-
-        Source folder/URL:
-        {$config->getSourcePath()}
-
-        Target folder/URL:
-        {$config->getTargetPath()}
+        {$config->toString()}
 
         TEXT;
     }

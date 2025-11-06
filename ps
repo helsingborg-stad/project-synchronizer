@@ -20,33 +20,48 @@ if (file_exists(__DIR__ . '/../../autoload.php')) {
 $cmd = (object) array_merge(
     [
         'source' => SOURCE_PATH,
-        'config' => CONFIG_PATH,
         'target' => TARGET_PATH,
+        'config' => CONFIG_PATH,
     ],
     getopt('', [
         'source:',
-        'config:',
         'target:',
+        'config:',
+        'init',
         'force',
         'help',
     ]),
 );
 
-if (isset($cmd->help)) {
-    echo <<<TEXT
-        Usage: ps [options]
-            --config <file|url>            Configuration file or URL
-            --source <folder|url>          Source repository path
-            --target <folder>              Target repository path
-            --force                        Overwrite existing files and property values
-            --help                         Display this help message
-        TEXT;
-    exit(1);
-}
-
-App\Module::main([
+$services = [
+    'config' => new ConfigService($cmd),
     'console' => new ConsoleService(),
     'file' => new FileService(),
     'transform' => new Transform(),
-    'config' => new ConfigService($cmd),
-]);
+];
+
+if (isset($cmd->help)) {
+    $services['console']->writeLn(<<<TEXT
+    Usage: ps [options]
+        --source <folder|url>          Source repository path
+        --target <folder>              Target repository path
+        --config <file|url>            Configuration file or URL
+        --init                         Create a new configuration file at target path
+        --force                        Overwrite existing files and property values
+        --help                         Display this help message
+    TEXT);
+    exit(1);
+}
+
+if (isset($cmd->init)) {
+    try {
+        $config->saveConfig(new FileService());
+        $services['console']->writeLn("Configuration file created at {$config->getConfigPath()}");
+        exit(0);
+    } catch (\Exception $e) {
+        $services['console']->writeLn($e->getMessage());
+        exit(1);
+    }
+}
+
+App\Module::main($services);

@@ -10,6 +10,10 @@ interface ConfigServiceInterface
 
     public function setFiles(array $files): void;
 
+    public function getConfig(): array;
+
+    public function setConfig(array $config): void;
+
     public function loadConfig(FileServiceInterface $fs): void;
 
     public function getSourcePath(): string;
@@ -27,4 +31,10 @@ interface ConfigServiceInterface
     public function getForce(): bool;
 
     public function setForce(bool $force): void;
+
+    public function getHelp(): bool;
+
+    public function setHelp(bool $help): void;
+
+    public function toString(): string;
 }

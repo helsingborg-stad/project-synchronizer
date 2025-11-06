@@ -11,4 +11,7 @@ class NullConsoleService implements ConsoleServiceInterface
     public function write(string $row): void
     {
     }
+    public function writeLn(string $text, ...$args): void
+    {
+    }
 }

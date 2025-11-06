@@ -6,5 +6,5 @@ namespace App\Contracts;
 
 interface TransformInterface
 {
-    public function transform(mixed $source, mixed $target, bool $overwrite): mixed;
+    public function transform(mixed $source, mixed $target, ConfigServiceInterface $config): mixed;
 }

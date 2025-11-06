@@ -16,9 +16,7 @@ class ConfigServiceTest extends TestCase
     {
         $this->config = new ConfigService((object) []);
 
-        $fs = $this->createMock(\App\Contracts\FileServiceInterface::class);
-
-        $fs->method('loadJSON')->willReturn([
+        $this->config->setConfig([
             'source' => 's1',
             'target' => 't1',
             'force' => true,
@@ -31,8 +29,6 @@ class ConfigServiceTest extends TestCase
                 'invalid_list' => ['key' => 'value'],
             ],
         ]);
-
-        $this->config->loadConfig($fs);
     }
 
     #[TestDox('class can be instantiated')]
@@ -50,8 +46,25 @@ class ConfigServiceTest extends TestCase
     #[TestDox('command line parameters read from config')]
     public function testCmdparametersThroughConfig()
     {
+        $this->config = new ConfigService((object) []);
+        $this->config->setConfig(['source' => 's1', 'target' => 't1', 'force' => true]);
+
         $this->assertEquals('s1', $this->config->getSourcePath());
         $this->assertEquals('t1', $this->config->getTargetPath());
         $this->assertEquals(true, $this->config->getForce());
+    }
+
+    #[TestDox('Use command line parameters over config')]
+    public function testCmdparametersOverConfig()
+    {
+        $this->config = new ConfigService((object) [
+            'source' => 's2',
+            'target' => 't2',
+        ]);
+        $this->config->setConfig(['files' => []]);
+
+        $this->assertEquals('s2', $this->config->getSourcePath());
+        $this->assertEquals('t2', $this->config->getTargetPath());
+        $this->assertEquals(false, $this->config->getForce());
     }
 }

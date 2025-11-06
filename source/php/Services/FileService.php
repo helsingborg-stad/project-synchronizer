@@ -20,17 +20,23 @@ class FileService implements FileServiceInterface
     public function loadText(string $path): string
     {
         $content = @file_get_contents($path);
+
         if ($content === false) {
             throw new \Exception("Failed to read from file: $path");
         }
         return $content;
     }
 
-    public function saveText(string $path, string $content): void
+    public function saveText(string $path, string $content, bool $overwrite = false): void
     {
+        if (!$overwrite && $this->exists($path)) {
+            throw new \Exception("File already exists: $path");
+        }
+
         $this->createDirectory(dirname($path));
 
         $result = @file_put_contents($path, $content);
+
         if ($result === false) {
             throw new \Exception("Failed to write to file: $path");
         }
@@ -39,19 +45,21 @@ class FileService implements FileServiceInterface
     public function loadJSON(string $path): array
     {
         $json = json_decode($this->loadText($path), true);
+
         if ($json === null) {
             throw new \Exception("Failed to decode JSON from file: $path");
         }
         return $json;
     }
 
-    public function saveJSON(string $path, array $json): void
+    public function saveJSON(string $path, array $json, bool $overwrite = false): void
     {
         $content = json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
         if ($content === false) {
             throw new \Exception("Failed to encode JSON for file: $path");
         }
-        $this->saveText($path, $content);
+        $this->saveText($path, $content, $overwrite);
     }
 
     public function exists(string $path): bool

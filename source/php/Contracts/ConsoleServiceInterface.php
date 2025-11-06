@@ -6,5 +6,7 @@ namespace App\Contracts;
 
 interface ConsoleServiceInterface
 {
-    public function write(string $row): void;
+    public function write(string $text, ...$args): void;
+
+    public function writeLn(string $text, ...$args): void;
 }
